@@ -1,4 +1,4 @@
-const { stringType, booleanType, numberType, objectKey, arrayType } = require('./constants');
+const { stringType, booleanType, numberType, objectKey, arrayType, objectType } = require('./constants');
 
 const encodeString = (stream, str, offset) => {
     let curr = offset;
@@ -45,6 +45,23 @@ const encodeArray = (stream, value, offset) => {
     }
 };
 
+const encodeObject = (stream, value, offset) => {
+    let curr = offset;
+    const keys = Object.keys(value);
+    stream.writeInt8(objectType, curr++);
+    stream.writeInt8(keys.length, curr++);
+
+    keys.forEach(key => {
+        const result = encodeKeyValuePair(stream, key, value[key], curr);
+        curr = result.offset;
+    });
+
+    return {
+        stream,
+        offset: curr
+    };
+};
+
 const encodeValue = (stream, value, offset) => {
     if (typeof value === 'boolean') {
         return encodeBoolean(stream, value, offset);
@@ -60,6 +77,10 @@ const encodeValue = (stream, value, offset) => {
 
     if (Array.isArray(value)) {
         return encodeArray(stream, value, offset);
+    }
+
+    if (typeof value === 'object') {
+        return encodeObject(stream, value, offset);
     }
 
     throw new Error(`Unkown type for ${typeof value}`);
@@ -80,5 +101,6 @@ module.exports = {
     encodeNumber,
     encodeString,
     encodeArray,
+    encodeObject,
     encodeKeyValuePair
 };

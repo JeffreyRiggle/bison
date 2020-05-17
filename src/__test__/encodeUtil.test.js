@@ -1,5 +1,5 @@
-const { encodeArray, encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair }= require('../encodeUtils');
-const { arrayType, booleanType, stringType, numberType, objectKey } = require('../constants');
+const { encodeArray, encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair, encodeObject }= require('../encodeUtils');
+const { arrayType, booleanType, stringType, numberType, objectKey, objectType } = require('../constants');
 
 describe('encode util', () => {
     let result;
@@ -293,6 +293,40 @@ describe('encode util', () => {
             it('should have the correct offset', () => {
                 expect(result.offset).toBe(11);
             });
+        });
+    });
+
+    describe('when an object is provided', () => {
+        beforeEach(() => {
+            result = encodeObject(Buffer.alloc(19), { foo: 5, bar: 'foo' }, 0);
+        });
+
+        it('should have the correct type', () => {
+            expect(result.stream[0]).toBe(objectType);
+        });
+
+        it('should have the correct length', () => {
+            expect(result.stream[1]).toBe(2);
+        });
+
+        it('should have the correct first key', () => {
+            expect(result.stream.toString('utf8', 4, 7)).toBe('foo');
+        });
+
+        it('should have the correct first value', () => {
+            expect(result.stream[8]).toBe(5);
+        });
+
+        it('should have the correct second key', () => {
+            expect(result.stream.toString('utf8', 11, 14)).toBe('bar');
+        });
+
+        it('should have the correct second value', () => {
+            expect(result.stream.toString('utf8', 16, 19)).toBe('foo');
+        });
+
+        it('should have the correct offset', () => {
+            expect(result.offset).toBe(19);
         });
     });
 
