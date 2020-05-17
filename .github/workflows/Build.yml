@@ -1,0 +1,22 @@
+name: BuildJS
+on: [push, pull_request]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Install node
+      uses: actions/setup-node@v1
+      with:
+          node-version: '10.x'
+
+    - name: Check out code
+      uses: actions/checkout@v1
+    
+    - name: Install
+      run: npm ci
+
+    - name: Test
+      run: npm run test
