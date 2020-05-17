@@ -1,0 +1,11 @@
+{
+    "value": true,
+    "foo": "bar",
+    "baz": 130,
+    "blue": [17, "foo", { "test": "vaue" }],
+    "green": {
+        "val": "str",
+        "go": 23,
+        "team": false
+    }
+}
