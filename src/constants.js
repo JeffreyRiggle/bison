@@ -4,5 +4,5 @@ module.exports = {
     numberType: 2,
     arrayType: 3,
     objectType: 4,
-    objectKey: 5
+    objectKey: 5,
 };

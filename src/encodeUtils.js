@@ -1,4 +1,4 @@
-const { stringType, booleanType, numberType, objectKey } = require('./constants');
+const { stringType, booleanType, numberType, objectKey, arrayType } = require('./constants');
 
 const encodeString = (stream, str, offset) => {
     let curr = offset;
@@ -29,6 +29,42 @@ const encodeNumber = (stream, num, offset) => {
     };
 };
 
+const encodeArray = (stream, value, offset) => {
+    let curr = offset;
+    stream.writeInt8(arrayType, curr++);
+    stream.writeInt8(value.length, curr++);
+
+    value.forEach(arrValue => {
+        const result = encodeValue(stream, arrValue, curr);
+        curr = result.offset;
+    });
+
+    return {
+        stream,
+        offset: curr
+    }
+};
+
+const encodeValue = (stream, value, offset) => {
+    if (typeof value === 'boolean') {
+        return encodeBoolean(stream, value, offset);
+    }
+
+    if (typeof value === 'string') {
+        return encodeString(stream, value, offset);
+    }
+
+    if (typeof value === 'number') {
+        return encodeNumber(stream, value, offset);
+    }
+
+    if (Array.isArray(value)) {
+        return encodeArray(stream, value, offset);
+    }
+
+    throw new Error(`Unkown type for ${typeof value}`);
+};
+
 const encodeKeyValuePair = (stream, key, value, offset) => {
     let curr = offset;
     stream.writeInt8(objectKey, curr++);
@@ -36,24 +72,13 @@ const encodeKeyValuePair = (stream, key, value, offset) => {
     stream.write(key, curr);
     curr += key.length;
 
-    if (typeof value === 'boolean') {
-        return encodeBoolean(stream, value, curr);
-    }
-
-    if (typeof value === 'string') {
-        return encodeString(stream, value, curr);
-    }
-
-    if (typeof value === 'number') {
-        return encodeNumber(stream, value, curr);
-    }
-
-    throw new Error(`Unkown type for ${typeof value}`);
-}
+    return encodeValue(stream, value, curr);
+};
 
 module.exports = {
     encodeBoolean,
     encodeNumber,
     encodeString,
+    encodeArray,
     encodeKeyValuePair
 };
