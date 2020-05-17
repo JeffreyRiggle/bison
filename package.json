@@ -1,0 +1,25 @@
+{
+  "name": "bison",
+  "version": "1.0.0",
+  "description": "JSON to binary",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeffreyRiggle/bison.git"
+  },
+  "keywords": [
+    "JSON"
+  ],
+  "author": "JeffreyRiggle@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JeffreyRiggle/bison/issues"
+  },
+  "homepage": "https://github.com/JeffreyRiggle/bison#readme",
+  "devDependencies": {
+    "jest": "^26.0.1"
+  }
+}
