@@ -1,5 +1,5 @@
-const { encodeBoolean, encodeNumber, encodeString } = require('../encodeUtils');
-const { decodeType, decodeBoolean, decodeNumber, decodeString } = require('../decodeUtils');
+const { encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair } = require('../encodeUtils');
+const { decodeType, decodeBoolean, decodeNumber, decodeString, decodeKeyValuePair } = require('../decodeUtils');
 const { booleanType, stringType, numberType } = require('../constants');
 
 describe('decode', () => {
@@ -79,6 +79,53 @@ describe('decode', () => {
 
             it('should have the correct value', () => {
                 expect(result.value).toBe('foo');
+            });
+        });
+    });
+
+    describe('decode key value pair', () => {
+        describe('when value is boolean', () => {
+            beforeEach(() => {
+                buff = encodeKeyValuePair(Buffer.alloc(7), 'foo', true, 0).stream;
+                result = decodeKeyValuePair(buff, 1);
+            });
+
+            it('should have the correct key', () => {
+                expect(result.key).toBe('foo');
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe(true);
+            });
+        });
+
+        describe('when value is number', () => {
+            beforeEach(() => {
+                buff = encodeKeyValuePair(Buffer.alloc(7), 'foo', 6, 0).stream;
+                result = decodeKeyValuePair(buff, 1);
+            });
+
+            it('should have the correct key', () => {
+                expect(result.key).toBe('foo');
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe(6);
+            });
+        });
+
+        describe('when value is string', () => {
+            beforeEach(() => {
+                buff = encodeKeyValuePair(Buffer.alloc(10), 'foo', 'bar', 0).stream;
+                result = decodeKeyValuePair(buff, 1);
+            });
+
+            it('should have the correct key', () => {
+                expect(result.key).toBe('foo');
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe('bar');
             });
         });
     });
