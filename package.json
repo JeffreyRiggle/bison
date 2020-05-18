@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "perf": "node ./testing/compare.js ./test.json"
+    "perf:small": "node ./testing/compare.js ./small.json",
+    "perf:nano": "node ./testing/compare.js ./nano.json"
   },
   "repository": {
     "type": "git",
