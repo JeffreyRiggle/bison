@@ -1,7 +1,7 @@
 {
     "value": true,
     "foo": "bar",
-    "baz": 120,
+    "baz": 9000,
     "blue": [17, "foo", { "test": "vaue" }],
     "green": {
         "val": "str",

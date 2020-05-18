@@ -64,7 +64,21 @@ describe('encode util', () => {
         });
 
         it('should have the correct value', () => {
-            expect(result[1]).toBe(6);
+            expect(result.readInt32LE(1)).toBe(6);
+        });
+    });
+
+    describe('when a large number is provided', () => {
+        beforeEach(() => {
+            result = encodeNumber(Buffer.alloc(0), 2147483647);
+        });
+
+        it('should have the correct type', () => {
+            expect(result[0]).toBe(numberType);
+        });
+
+        it('should have the correct value', () => {
+            expect(result.readInt32LE(1)).toBe(2147483647);
         });
     });
 
@@ -87,23 +101,23 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value', () => {
-                expect(result[3]).toBe(5);
+                expect(result.readInt32LE(3)).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result[4]).toBe(numberType);
+                expect(result[7]).toBe(numberType);
             });
 
             it('should have the correct second value', () => {
-                expect(result[5]).toBe(8);
+                expect(result.readInt32LE(8)).toBe(8);
             });
 
             it('should have the correct third value type', () => {
-                expect(result[6]).toBe(numberType);
+                expect(result[12]).toBe(numberType);
             });
 
             it('should have the correct third value', () => {
-                expect(result[7]).toBe(2);
+                expect(result.readInt32LE(13)).toBe(2);
             });
         });
 
@@ -201,23 +215,23 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value', () => {
-                expect(result[5]).toBe(5);
+                expect(result.readInt32LE(5)).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result[6]).toBe(arrayType);
+                expect(result[9]).toBe(arrayType);
             });
 
             it('should have the correct second value', () => {
-                expect(result[9]).toBe(8);
+                expect(result.readInt32LE(12)).toBe(8);
             });
 
             it('should have the correct third value type', () => {
-                expect(result[10]).toBe(arrayType);
+                expect(result[16]).toBe(arrayType);
             });
 
             it('should have the correct third value', () => {
-                expect(result[13]).toBe(2);
+                expect(result.readInt32LE(19)).toBe(2);
             });
         });
 
@@ -239,23 +253,23 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value', () => {
-                expect(result[3]).toBe(5);
+                expect(result.readInt32LE(3)).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result[4]).toBe(booleanType);
+                expect(result[7]).toBe(booleanType);
             });
 
             it('should have the correct second value', () => {
-                expect(result[5]).toBe(1);
+                expect(result[8]).toBe(1);
             });
 
             it('should have the correct third value type', () => {
-                expect(result[6]).toBe(stringType);
+                expect(result[9]).toBe(stringType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.toString('utf8', 8, 11)).toBe('foo');
+                expect(result.toString('utf8', 11)).toBe('foo');
             });
         });
     });
@@ -278,15 +292,15 @@ describe('encode util', () => {
         });
 
         it('should have the correct first value', () => {
-            expect(result[8]).toBe(5);
+            expect(result.readInt32LE(8)).toBe(5);
         });
 
         it('should have the correct second key', () => {
-            expect(result.toString('utf8', 11, 14)).toBe('bar');
+            expect(result.toString('utf8', 14, 17)).toBe('bar');
         });
 
         it('should have the correct second value', () => {
-            expect(result.toString('utf8', 16, 19)).toBe('foo');
+            expect(result.toString('utf8', 19)).toBe('foo');
         });
     });
 
@@ -353,7 +367,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct value', () => {
-                expect(result[6]).toBe(6);
+                expect(result.readInt32LE(6)).toBe(6);
             });
         });
 
@@ -375,7 +389,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct value', () => {
-                expect(result[8]).toBe(6);
+                expect(result.readInt32LE(8)).toBe(6);
             });
         });
 

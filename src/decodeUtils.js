@@ -25,8 +25,8 @@ const decodeBoolean = (stream, offset) => {
 
 const decodeNumber = (stream, offset) => {
     return {
-        value: stream.readInt8(offset),
-        offset: offset + 1
+        value: stream.readInt32LE(offset),
+        offset: offset + 4
     }
 }
 

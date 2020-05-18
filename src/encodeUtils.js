@@ -18,9 +18,9 @@ const encodeBoolean = (stream, boolean) => {
 };
 
 const encodeNumber = (stream, num) => {
-    const buff = Buffer.alloc(2);
+    const buff = Buffer.alloc(5);
     buff.writeInt8(numberType);
-    buff.writeInt8(num, 1);
+    buff.writeInt32LE(num, 1);
     
     return Buffer.concat([stream, buff]);
 };
