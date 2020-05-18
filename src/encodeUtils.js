@@ -1,65 +1,56 @@
 const { stringType, booleanType, numberType, objectKey, arrayType, objectType } = require('./constants');
 
-const encodeString = (stream, str, offset) => {
-    let curr = offset;
-    stream.writeInt8(stringType, curr++);
-    stream.writeInt8(str.length, curr++);
-    stream.write(str, curr);
-    return {
-        stream,
-        offset: curr + str.length
-    };
+const encodeString = (stream, str) => {
+    const buff = Buffer.alloc(str.length + 2);
+    buff.writeInt8(stringType, 0);
+    buff.writeInt8(str.length, 1);
+    buff.write(str, 2);
+
+    return Buffer.concat([stream, buff]);
 }
 
-const encodeBoolean = (stream, boolean, offset) => {
-    stream.writeInt8(booleanType, offset);
-    stream.writeInt8(boolean ? 1 : 0, offset + 1);
-    return {
-        stream,
-        offset: offset + 2
-    };
+const encodeBoolean = (stream, boolean) => {
+    const buff = Buffer.alloc(2);
+    buff.writeInt8(booleanType);
+    buff.writeInt8(boolean ? 1 : 0, 1);
+
+    return Buffer.concat([stream, buff]);
 };
 
-const encodeNumber = (stream, num, offset) => {
-    stream.writeInt8(numberType, offset);
-    stream.writeInt8(num, offset + 1);
-    return {
-        stream,
-        offset: offset + 2
-    };
+const encodeNumber = (stream, num) => {
+    const buff = Buffer.alloc(2);
+    buff.writeInt8(numberType);
+    buff.writeInt8(num, 1);
+    
+    return Buffer.concat([stream, buff]);
 };
 
-const encodeArray = (stream, value, offset) => {
-    let curr = offset;
-    stream.writeInt8(arrayType, curr++);
-    stream.writeInt8(value.length, curr++);
+const encodeArray = (stream, value) => {
+    const rootBuff = Buffer.alloc(2);
+    rootBuff.writeInt8(arrayType, 0);
+    rootBuff.writeInt8(value.length, 1);
+
+    const buffs = [];
 
     value.forEach(arrValue => {
-        const result = encodeValue(stream, arrValue, curr);
-        curr = result.offset;
+        buffs.push(encodeValue(Buffer.alloc(0), arrValue));
     });
 
-    return {
-        stream,
-        offset: curr
-    }
+    return Buffer.concat([stream, rootBuff, ...buffs]);
 };
 
-const encodeObject = (stream, value, offset) => {
-    let curr = offset;
+const encodeObject = (stream, value) => {
+    const buff = Buffer.alloc(2);
     const keys = Object.keys(value);
-    stream.writeInt8(objectType, curr++);
-    stream.writeInt8(keys.length, curr++);
+    buff.writeInt8(objectType);
+    buff.writeInt8(keys.length, 1);
+    const buffs = [];
 
     keys.forEach(key => {
-        const result = encodeKeyValuePair(stream, key, value[key], curr);
-        curr = result.offset;
+        buffs.push(encodeKeyValuePair(Buffer.alloc(0), key, value[key]));
     });
 
-    return {
-        stream,
-        offset: curr
-    };
+    return Buffer.concat([stream, buff, ...buffs]);
 };
 
 const encodeValue = (stream, value, offset) => {
@@ -86,14 +77,13 @@ const encodeValue = (stream, value, offset) => {
     throw new Error(`Unkown type for ${typeof value}`);
 };
 
-const encodeKeyValuePair = (stream, key, value, offset) => {
-    let curr = offset;
-    stream.writeInt8(objectKey, curr++);
-    stream.writeInt8(key.length, curr++);
-    stream.write(key, curr);
-    curr += key.length;
+const encodeKeyValuePair = (stream, key, value) => {
+    const buff = Buffer.alloc(key.length + 2);
+    buff.writeInt8(objectKey);
+    buff.writeInt8(key.length, 1);
+    buff.write(key, 2);
 
-    return encodeValue(stream, value, curr);
+    return Buffer.concat([stream, encodeValue(buff, value)])
 };
 
 module.exports = {

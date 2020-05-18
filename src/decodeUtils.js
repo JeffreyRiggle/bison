@@ -1,4 +1,4 @@
-const { booleanType, numberType, stringType, arrayType } = require('./constants');
+const { booleanType, numberType, stringType, arrayType, objectType } = require('./constants');
 
 const decodeType = (stream, offset) => {
     return {
@@ -50,6 +50,26 @@ const decodeArray = (stream, offset) => {
     };
 };
 
+const decodeObject = (stream, offset) => {
+    let curr = offset;
+    const len = stream.readInt8(curr++);
+    let retVal = {};
+    let iter = 0;
+
+    while(iter < len) {
+        const typeRes = decodeType(stream, curr);
+        const res = decodeKeyValuePair(stream, typeRes.offset);
+        curr = res.offset;
+        retVal[res.key] = res.value;
+        iter++;
+    }
+
+    return {
+        value: retVal,
+        offset: curr
+    };
+};
+
 const decodeValue = (stream, type, offset) => {
     if (type === booleanType) {
         return decodeBoolean(stream, offset);
@@ -65,6 +85,10 @@ const decodeValue = (stream, type, offset) => {
 
     if (type === arrayType) {
         return decodeArray(stream, offset);
+    }
+
+    if (type === objectType) {
+        return decodeObject(stream, offset);
     }
 
     throw new Error(`Unknown type ${type}`);
@@ -88,5 +112,6 @@ module.exports = {
     decodeNumber,
     decodeString,
     decodeArray,
+    decodeObject,
     decodeKeyValuePair
 };

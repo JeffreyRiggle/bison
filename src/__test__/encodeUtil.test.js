@@ -7,37 +7,29 @@ describe('encode util', () => {
     describe('when a boolean is provided', () => {
         describe('when value is true', () => {
             beforeEach(() => {
-                result = encodeBoolean(Buffer.alloc(2), true, 0);
+                result = encodeBoolean(Buffer.alloc(0), true);
             });
 
             it('should have the correct type', () => {
-                expect(result.stream[0]).toBe(booleanType);
+                expect(result[0]).toBe(booleanType);
             });
 
             it('should have the correct value', () => {
-                expect(result.stream[1]).toBe(1);
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(2);
+                expect(result[1]).toBe(1);
             });
         });
 
         describe('when value is false', () => {
             beforeEach(() => {
-                result = encodeBoolean(Buffer.alloc(2), false, 0);
+                result = encodeBoolean(Buffer.alloc(2), false);
             });
 
             it('should have the correct type', () => {
-                expect(result.stream[0]).toBe(booleanType);
+                expect(result[0]).toBe(booleanType);
             });
 
             it('should have the correct value', () => {
-                expect(result.stream[1]).toBe(0);
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(2);
+                expect(result[1]).toBe(0);
             });
         });
     });
@@ -46,392 +38,344 @@ describe('encode util', () => {
         const original = 'foobar';
 
         beforeEach(() => {
-            result = encodeString(Buffer.alloc(2 + original.length), original, 0);
+            result = encodeString(Buffer.alloc(0), original);
         });
 
         it('should have the correct type', () => {
-            expect(result.stream[0]).toBe(stringType);
+            expect(result[0]).toBe(stringType);
         });
 
         it('should have the correct length', () => {
-            expect(result.stream[1]).toBe(original.length);
+            expect(result[1]).toBe(original.length);
         });
 
         it('should have the correct string', () => {
-            expect(result.stream.toString('utf8', 2)).toBe(original);
-        });
-
-        it('should have the correct offset', () => {
-            expect(result.offset).toBe(2 + original.length);
+            expect(result.toString('utf8', 2)).toBe(original);
         });
     });
 
     describe('when a number is provided', () => {
         beforeEach(() => {
-            result = encodeNumber(Buffer.alloc(2), 6, 0);
+            result = encodeNumber(Buffer.alloc(0), 6);
         });
 
         it('should have the correct type', () => {
-            expect(result.stream[0]).toBe(numberType);
+            expect(result[0]).toBe(numberType);
         });
 
         it('should have the correct value', () => {
-            expect(result.stream[1]).toBe(6);
-        });
-
-        it('should have the correct offset', () => {
-            expect(result.offset).toBe(2);
+            expect(result[1]).toBe(6);
         });
     });
 
     describe('when array is encoded', () => {
         describe('and values are numbers', () => {
             beforeEach(() => {
-                result = encodeArray(Buffer.alloc(8), [5, 8, 2], 0);
+                result = encodeArray(Buffer.alloc(0), [5, 8, 2]);
             });
 
             it('should have the correct type', () => {
-                expect(result.stream[0]).toBe(arrayType);
+                expect(result[0]).toBe(arrayType);
             });
 
             it('should have the correct array length', () => {
-                expect(result.stream[1]).toBe(3);
+                expect(result[1]).toBe(3);
             });
 
             it('should have the correct first value type', () => {
-                expect(result.stream[2]).toBe(numberType);
+                expect(result[2]).toBe(numberType);
             });
 
             it('should have the correct first value', () => {
-                expect(result.stream[3]).toBe(5);
+                expect(result[3]).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result.stream[4]).toBe(numberType);
+                expect(result[4]).toBe(numberType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.stream[5]).toBe(8);
+                expect(result[5]).toBe(8);
             });
 
             it('should have the correct third value type', () => {
-                expect(result.stream[6]).toBe(numberType);
+                expect(result[6]).toBe(numberType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.stream[7]).toBe(2);
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(8);
+                expect(result[7]).toBe(2);
             });
         });
 
         describe('and values are booleans', () => {
             beforeEach(() => {
-                result = encodeArray(Buffer.alloc(8), [true, true, false], 0);
+                result = encodeArray(Buffer.alloc(0), [true, true, false]);
             });
 
             it('should have the correct type', () => {
-                expect(result.stream[0]).toBe(arrayType);
+                expect(result[0]).toBe(arrayType);
             });
 
             it('should have the correct array length', () => {
-                expect(result.stream[1]).toBe(3);
+                expect(result[1]).toBe(3);
             });
 
             it('should have the correct first value type', () => {
-                expect(result.stream[2]).toBe(booleanType);
+                expect(result[2]).toBe(booleanType);
             });
 
             it('should have the correct first value', () => {
-                expect(result.stream[3]).toBe(1);
+                expect(result[3]).toBe(1);
             });
 
             it('should have the correct second value type', () => {
-                expect(result.stream[4]).toBe(booleanType);
+                expect(result[4]).toBe(booleanType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.stream[5]).toBe(1);
+                expect(result[5]).toBe(1);
             });
 
             it('should have the correct third value type', () => {
-                expect(result.stream[6]).toBe(booleanType);
+                expect(result[6]).toBe(booleanType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.stream[7]).toBe(0);
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(8);
+                expect(result[7]).toBe(0);
             });
         })
 
         describe('and values are strings', () => {
             beforeEach(() => {
-                result = encodeArray(Buffer.alloc(17), ['foo', 'bar', 'baz'], 0);
+                result = encodeArray(Buffer.alloc(0), ['foo', 'bar', 'baz']);
             });
 
             it('should have the correct type', () => {
-                expect(result.stream[0]).toBe(arrayType);
+                expect(result[0]).toBe(arrayType);
             });
 
             it('should have the correct array length', () => {
-                expect(result.stream[1]).toBe(3);
+                expect(result[1]).toBe(3);
             });
 
             it('should have the correct first value type', () => {
-                expect(result.stream[2]).toBe(stringType);
+                expect(result[2]).toBe(stringType);
             });
 
             it('should have the correct first value', () => {
-                expect(result.stream.toString('utf8', 4, 7)).toBe('foo');
+                expect(result.toString('utf8', 4, 7)).toBe('foo');
             });
 
             it('should have the correct second value type', () => {
-                expect(result.stream[7]).toBe(stringType);
+                expect(result[7]).toBe(stringType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.stream.toString('utf8', 9, 12)).toBe('bar');
+                expect(result.toString('utf8', 9, 12)).toBe('bar');
             });
 
             it('should have the correct third value type', () => {
-                expect(result.stream[12]).toBe(stringType);
+                expect(result[12]).toBe(stringType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.stream.toString('utf8', 14, 17)).toBe('baz');
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(17);
+                expect(result.toString('utf8', 14, 17)).toBe('baz');
             });
         })
 
         describe('and values are arrays', () => {
             beforeEach(() => {
-                result = encodeArray(Buffer.alloc(14), [[5], [8], [2]], 0);
+                result = encodeArray(Buffer.alloc(0), [[5], [8], [2]]);
             });
 
             it('should have the correct type', () => {
-                expect(result.stream[0]).toBe(arrayType);
+                expect(result[0]).toBe(arrayType);
             });
 
             it('should have the correct array length', () => {
-                expect(result.stream[1]).toBe(3);
+                expect(result[1]).toBe(3);
             });
 
             it('should have the correct first value type', () => {
-                expect(result.stream[2]).toBe(arrayType);
+                expect(result[2]).toBe(arrayType);
             });
 
             it('should have the correct first value', () => {
-                expect(result.stream[5]).toBe(5);
+                expect(result[5]).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result.stream[6]).toBe(arrayType);
+                expect(result[6]).toBe(arrayType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.stream[9]).toBe(8);
+                expect(result[9]).toBe(8);
             });
 
             it('should have the correct third value type', () => {
-                expect(result.stream[10]).toBe(arrayType);
+                expect(result[10]).toBe(arrayType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.stream[13]).toBe(2);
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(14);
+                expect(result[13]).toBe(2);
             });
         });
 
         describe('and values are mixed', () => {
             beforeEach(() => {
-                result = encodeArray(Buffer.alloc(11), [5, true, 'foo'], 0);
+                result = encodeArray(Buffer.alloc(0), [5, true, 'foo']);
             });
 
             it('should have the correct type', () => {
-                expect(result.stream[0]).toBe(arrayType);
+                expect(result[0]).toBe(arrayType);
             });
 
             it('should have the correct array length', () => {
-                expect(result.stream[1]).toBe(3);
+                expect(result[1]).toBe(3);
             });
 
             it('should have the correct first value type', () => {
-                expect(result.stream[2]).toBe(numberType);
+                expect(result[2]).toBe(numberType);
             });
 
             it('should have the correct first value', () => {
-                expect(result.stream[3]).toBe(5);
+                expect(result[3]).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result.stream[4]).toBe(booleanType);
+                expect(result[4]).toBe(booleanType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.stream[5]).toBe(1);
+                expect(result[5]).toBe(1);
             });
 
             it('should have the correct third value type', () => {
-                expect(result.stream[6]).toBe(stringType);
+                expect(result[6]).toBe(stringType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.stream.toString('utf8', 8, 11)).toBe('foo');
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(11);
+                expect(result.toString('utf8', 8, 11)).toBe('foo');
             });
         });
     });
 
     describe('when an object is provided', () => {
         beforeEach(() => {
-            result = encodeObject(Buffer.alloc(19), { foo: 5, bar: 'foo' }, 0);
+            result = encodeObject(Buffer.alloc(0), { foo: 5, bar: 'foo' });
         });
 
         it('should have the correct type', () => {
-            expect(result.stream[0]).toBe(objectType);
+            expect(result[0]).toBe(objectType);
         });
 
         it('should have the correct length', () => {
-            expect(result.stream[1]).toBe(2);
+            expect(result[1]).toBe(2);
         });
 
         it('should have the correct first key', () => {
-            expect(result.stream.toString('utf8', 4, 7)).toBe('foo');
+            expect(result.toString('utf8', 4, 7)).toBe('foo');
         });
 
         it('should have the correct first value', () => {
-            expect(result.stream[8]).toBe(5);
+            expect(result[8]).toBe(5);
         });
 
         it('should have the correct second key', () => {
-            expect(result.stream.toString('utf8', 11, 14)).toBe('bar');
+            expect(result.toString('utf8', 11, 14)).toBe('bar');
         });
 
         it('should have the correct second value', () => {
-            expect(result.stream.toString('utf8', 16, 19)).toBe('foo');
-        });
-
-        it('should have the correct offset', () => {
-            expect(result.offset).toBe(19);
+            expect(result.toString('utf8', 16, 19)).toBe('foo');
         });
     });
 
     describe('when key value is provided', () => {
         describe('and value is string', () => {
             beforeEach(() => {
-                result = encodeKeyValuePair(Buffer.alloc(10), 'foo', 'bar', 0);
+                result = encodeKeyValuePair(Buffer.alloc(0), 'foo', 'bar');
             });
 
             it('should have the correct type for object', () => {
-                expect(result.stream[0]).toBe(objectKey);
+                expect(result[0]).toBe(objectKey);
             });
 
             it('should have the correct property key', () => {
-                expect(result.stream.toString('utf8', 2, 5)).toBe('foo');
+                expect(result.toString('utf8', 2, 5)).toBe('foo');
             });
 
             it('should have the correct value type', () => {
-                expect(result.stream[5]).toBe(stringType);
+                expect(result[5]).toBe(stringType);
             });
 
             it('should have the correct value', () => {
-                expect(result.stream.toString('utf8', 7)).toBe('bar');
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(10);
+                expect(result.toString('utf8', 7)).toBe('bar');
             });
         });
 
         describe('and value is boolean', () => {
             beforeEach(() => {
-                result = encodeKeyValuePair(Buffer.alloc(7), 'foo', true, 0);
+                result = encodeKeyValuePair(Buffer.alloc(0), 'foo', true);
             });
 
             it('should have the correct type for object', () => {
-                expect(result.stream[0]).toBe(objectKey);
+                expect(result[0]).toBe(objectKey);
             });
 
             it('should have the correct property key', () => {
-                expect(result.stream.toString('utf8', 2, 5)).toBe('foo');
+                expect(result.toString('utf8', 2, 5)).toBe('foo');
             });
 
             it('should have the correct value type', () => {
-                expect(result.stream[5]).toBe(booleanType);
+                expect(result[5]).toBe(booleanType);
             });
 
             it('should have the correct value', () => {
-                expect(result.stream[6]).toBe(1);
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(7);
+                expect(result[6]).toBe(1);
             });
         });
 
         describe('and value is number', () => {
             beforeEach(() => {
-                result = encodeKeyValuePair(Buffer.alloc(7), 'foo', 6, 0);
+                result = encodeKeyValuePair(Buffer.alloc(0), 'foo', 6);
             });
 
             it('should have the correct type for object', () => {
-                expect(result.stream[0]).toBe(objectKey);
+                expect(result[0]).toBe(objectKey);
             });
 
             it('should have the correct property key', () => {
-                expect(result.stream.toString('utf8', 2, 5)).toBe('foo');
+                expect(result.toString('utf8', 2, 5)).toBe('foo');
             });
 
             it('should have the correct value type', () => {
-                expect(result.stream[5]).toBe(numberType);
+                expect(result[5]).toBe(numberType);
             });
 
             it('should have the correct value', () => {
-                expect(result.stream[6]).toBe(6);
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(7);
+                expect(result[6]).toBe(6);
             });
         });
 
         describe('and value is an array', () => {
             beforeEach(() => {
-                result = encodeKeyValuePair(Buffer.alloc(9), 'foo', [6], 0);
+                result = encodeKeyValuePair(Buffer.alloc(0), 'foo', [6]);
             });
 
             it('should have the correct type for object', () => {
-                expect(result.stream[0]).toBe(objectKey);
+                expect(result[0]).toBe(objectKey);
             });
 
             it('should have the correct property key', () => {
-                expect(result.stream.toString('utf8', 2, 5)).toBe('foo');
+                expect(result.toString('utf8', 2, 5)).toBe('foo');
             });
 
             it('should have the correct value type', () => {
-                expect(result.stream[5]).toBe(arrayType);
+                expect(result[5]).toBe(arrayType);
             });
 
             it('should have the correct value', () => {
-                expect(result.stream[8]).toBe(6);
-            });
-
-            it('should have the correct offset', () => {
-                expect(result.offset).toBe(9);
+                expect(result[8]).toBe(6);
             });
         });
 
@@ -439,7 +383,7 @@ describe('encode util', () => {
             let thrown;
             beforeEach(() => {
                 try {
-                    result = encodeKeyValuePair(Buffer.alloc(1), 'foo', () => {}, 0);
+                    result = encodeKeyValuePair(Buffer.alloc(0), 'foo', () => {});
                     thrown = false;
                 } catch (err) {
                     thrown = true;

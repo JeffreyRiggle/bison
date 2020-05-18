@@ -7,7 +7,7 @@ describe('decode', () => {
 
     describe('when decoding a boolean', () => {
         beforeEach(() => {
-            buff = encodeBoolean(Buffer.alloc(3), true, 0).stream;
+            buff = encodeBoolean(Buffer.alloc(0), true, 0);
         });
 
         describe('when decoding the type', () => {
@@ -33,7 +33,7 @@ describe('decode', () => {
 
     describe('when decoding a number', () => {
         beforeEach(() => {
-            buff = encodeNumber(Buffer.alloc(3), 6, 0).stream;
+            buff = encodeNumber(Buffer.alloc(0), 6);
         });
 
         describe('when decoding the type', () => {
@@ -59,7 +59,7 @@ describe('decode', () => {
 
     describe('when decoding a string', () => {
         beforeEach(() => {
-            buff = encodeString(Buffer.alloc(5), 'foo', 0).stream;
+            buff = encodeString(Buffer.alloc(0), 'foo');
         });
 
         describe('when decoding the type', () => {
@@ -85,7 +85,7 @@ describe('decode', () => {
 
     describe('when decoding an array', () => {
         beforeEach(() => {
-            buff = encodeArray(Buffer.alloc(13), [5, true, 'foo'], 0).stream;
+            buff = encodeArray(Buffer.alloc(0), [5, true, 'foo']);
         });
 
         describe('when decoding the type', () => {
@@ -124,7 +124,7 @@ describe('decode', () => {
     describe('decode key value pair', () => {
         describe('when value is boolean', () => {
             beforeEach(() => {
-                buff = encodeKeyValuePair(Buffer.alloc(7), 'foo', true, 0).stream;
+                buff = encodeKeyValuePair(Buffer.alloc(0), 'foo', true);
                 result = decodeKeyValuePair(buff, 1);
             });
 
@@ -139,7 +139,7 @@ describe('decode', () => {
 
         describe('when value is number', () => {
             beforeEach(() => {
-                buff = encodeKeyValuePair(Buffer.alloc(7), 'foo', 6, 0).stream;
+                buff = encodeKeyValuePair(Buffer.alloc(0), 'foo', 6);
                 result = decodeKeyValuePair(buff, 1);
             });
 
@@ -154,7 +154,7 @@ describe('decode', () => {
 
         describe('when value is string', () => {
             beforeEach(() => {
-                buff = encodeKeyValuePair(Buffer.alloc(10), 'foo', 'bar', 0).stream;
+                buff = encodeKeyValuePair(Buffer.alloc(0), 'foo', 'bar');
                 result = decodeKeyValuePair(buff, 1);
             });
 
@@ -169,7 +169,7 @@ describe('decode', () => {
 
         describe('when value is array', () => {
             beforeEach(() => {
-                buff = encodeKeyValuePair(Buffer.alloc(10), 'foo', [3], 0).stream;
+                buff = encodeKeyValuePair(Buffer.alloc(0), 'foo', [3]);
                 result = decodeKeyValuePair(buff, 1);
             });
 
