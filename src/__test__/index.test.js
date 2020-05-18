@@ -109,7 +109,7 @@ describe('JSON conversion', () => {
     describe('when an object using a number is used', () => {
         beforeEach(() => {
             original = {
-                value: 230
+                value: 120
             };
 
             encodedResult = encode(original);
@@ -125,7 +125,7 @@ describe('JSON conversion', () => {
             });
 
             it('should have the correct value', () => {
-                expect(result.value).toBe(230);
+                expect(result.value).toBe(120);
             });
         });
     });

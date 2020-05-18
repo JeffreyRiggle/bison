@@ -1,7 +1,10 @@
+const { encodeObject } = require('./encodeUtils');
+const { decodeObject } = require('./decodeUtils');
+
 module.exports.encode = (json) => {
-    return Buffer.from(JSON.stringify(json));
+    return encodeObject(Buffer.alloc(0), json);
 };
 
 module.exports.decode = (stream) => {
-    return JSON.parse(stream.toString());
+    return decodeObject(stream, 1).value;
 };
