@@ -46,11 +46,31 @@ describe('encode util', () => {
         });
 
         it('should have the correct length', () => {
-            expect(result[1]).toBe(original.length);
+            expect(result.readInt32LE(1)).toBe(original.length);
         });
 
         it('should have the correct string', () => {
-            expect(result.toString('utf8', 2)).toBe(original);
+            expect(result.toString('utf8', 5)).toBe(original);
+        });
+    });
+
+    describe('when a long string is provided', () => {
+        const original = 'Bacon ipsum dolor amet pork belly tongue pancetta turducken, bresaola shank meatball fatback salami sirloin ground round. Pork loin shankle strip steak salami chicken sausage prosciutto flank. Andouille salami corned beef, prosciutto chislic turducken shank doner jerky kielbasa pork loin bresaola chuck burgdoggen. Cupim ground round pork belly ham, biltong rump frankfurter bresaola shank shankle andouille fatback.';
+
+        beforeEach(() => {
+            result = encodeString(Buffer.alloc(0), original);
+        });
+
+        it('should have the correct type', () => {
+            expect(result[0]).toBe(stringType);
+        });
+
+        it('should have the correct length', () => {
+            expect(result.readInt32LE(1)).toBe(original.length);
+        });
+
+        it('should have the correct string', () => {
+            expect(result.toString('utf8', 5)).toBe(original);
         });
     });
 
@@ -177,23 +197,23 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value', () => {
-                expect(result.toString('utf8', 4, 7)).toBe('foo');
+                expect(result.toString('utf8', 7, 10)).toBe('foo');
             });
 
             it('should have the correct second value type', () => {
-                expect(result[7]).toBe(stringType);
+                expect(result[10]).toBe(stringType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.toString('utf8', 9, 12)).toBe('bar');
+                expect(result.toString('utf8', 15, 18)).toBe('bar');
             });
 
             it('should have the correct third value type', () => {
-                expect(result[12]).toBe(stringType);
+                expect(result[18]).toBe(stringType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.toString('utf8', 14, 17)).toBe('baz');
+                expect(result.toString('utf8', 23, 26)).toBe('baz');
             });
         })
 
@@ -269,7 +289,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct third value', () => {
-                expect(result.toString('utf8', 11)).toBe('foo');
+                expect(result.toString('utf8', 14)).toBe('foo');
             });
         });
     });
@@ -300,7 +320,7 @@ describe('encode util', () => {
         });
 
         it('should have the correct second value', () => {
-            expect(result.toString('utf8', 19)).toBe('foo');
+            expect(result.toString('utf8', 22)).toBe('foo');
         });
     });
 
@@ -323,7 +343,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct value', () => {
-                expect(result.toString('utf8', 7)).toBe('bar');
+                expect(result.toString('utf8', 10)).toBe('bar');
             });
         });
 

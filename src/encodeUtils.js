@@ -1,10 +1,10 @@
 const { stringType, booleanType, numberType, objectKey, arrayType, objectType } = require('./constants');
 
 const encodeString = (stream, str) => {
-    const buff = Buffer.alloc(str.length + 2);
+    const buff = Buffer.alloc(str.length + 5);
     buff.writeInt8(stringType, 0);
-    buff.writeInt8(str.length, 1);
-    buff.write(str, 2);
+    buff.writeInt32LE(str.length, 1);
+    buff.write(str, 5);
 
     return Buffer.concat([stream, buff]);
 }

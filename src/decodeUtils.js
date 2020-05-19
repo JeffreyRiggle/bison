@@ -7,12 +7,21 @@ const decodeType = (stream, offset) => {
     };
 }
 
-const decodeString = (stream, offset) => {
+const decodePropertyString = (stream, offset) => {
     const stringLen = stream.readInt8(offset);
 
     return {
         value: stream.toString('utf8', offset + 1, offset + stringLen + 1),
         offset: offset + stringLen + 1
+    };
+}
+
+const decodeString = (stream, offset) => {
+    const stringLen = stream.readInt32LE(offset);
+
+    return {
+        value: stream.toString('utf8', offset + 4, offset + stringLen + 4),
+        offset: offset + stringLen + 4
     };
 }
 
@@ -95,7 +104,7 @@ const decodeValue = (stream, type, offset) => {
 }
 
 const decodeKeyValuePair = (stream, offset) => {
-    const keyResult = decodeString(stream, offset);
+    const keyResult = decodePropertyString(stream, offset);
     const valueTypeResult = decodeType(stream, keyResult.offset);
     const valueResult = decodeValue(stream, valueTypeResult.value, valueTypeResult.offset);
 
