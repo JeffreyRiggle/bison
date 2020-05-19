@@ -1,4 +1,15 @@
-const { stringType, booleanType, numberType, objectKey, arrayType, objectType } = require('./constants');
+const { 
+    stringType,
+    booleanType,
+    numberType,
+    objectKey,
+    arrayType,
+    objectType,
+    nanoNumberType,
+    smallNumberType,
+    floatType,
+    doubleType
+} = require('./constants');
 
 const encodeString = (stream, str) => {
     const buff = Buffer.alloc(str.length + 5);
@@ -17,12 +28,58 @@ const encodeBoolean = (stream, boolean) => {
     return Buffer.concat([stream, buff]);
 };
 
-const encodeNumber = (stream, num) => {
+const encodeNanoNumber = (stream, num) => {
+    const buff = Buffer.alloc(2);
+    buff.writeInt8(nanoNumberType);
+    buff.writeInt8(num, 1);
+    
+    return Buffer.concat([stream, buff]);
+}
+
+const encodeFloat = (stream, num) => {
+    const buff = Buffer.alloc(5);
+    buff.writeInt8(floatType);
+    buff.writeFloatLE(num, 1);
+    
+    return Buffer.concat([stream, buff]);
+}
+
+const encodeSmallNumber = (stream, num) => {
+    const buff = Buffer.alloc(3);
+    buff.writeInt8(smallNumberType);
+    buff.writeInt16LE(num, 1);
+    
+    return Buffer.concat([stream, buff]);
+}
+
+const encodeDouble = (stream, num) => {
+    const buff = Buffer.alloc(9);
+    buff.writeInt8(doubleType);
+    buff.writeDoubleLE(num, 1);
+    
+    return Buffer.concat([stream, buff]);
+}
+
+const encodeLargeNumber = (stream, num) => {
     const buff = Buffer.alloc(5);
     buff.writeInt8(numberType);
     buff.writeInt32LE(num, 1);
     
     return Buffer.concat([stream, buff]);
+}
+
+const encodeNumber = (stream, num) => {
+    const isDecimal = !Number.isInteger(num);
+
+    if (num < 128) {
+        return isDecimal ? encodeFloat(stream, num) : encodeNanoNumber(stream, num);
+    }
+
+    if (num < 32768) {
+        return isDecimal ? encodeFloat(stream, num) : encodeSmallNumber(stream, num);
+    }
+
+    return isDecimal ? encodeDouble(stream, num) : encodeLargeNumber(stream, num);
 };
 
 const encodeArray = (stream, value) => {

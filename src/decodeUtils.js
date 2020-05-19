@@ -1,4 +1,14 @@
-const { booleanType, numberType, stringType, arrayType, objectType } = require('./constants');
+const { 
+    stringType,
+    booleanType,
+    numberType,
+    arrayType,
+    objectType,
+    nanoNumberType,
+    smallNumberType,
+    floatType,
+    doubleType
+} = require('./constants');
 
 const decodeType = (stream, offset) => {
     return {
@@ -32,10 +42,38 @@ const decodeBoolean = (stream, offset) => {
     };
 }
 
+const decodeNanoNumber = (stream, offset) => {
+    return {
+        value: stream.readInt8(offset),
+        offset: offset + 1
+    }
+}
+
+const decodeSmallNumber = (stream, offset) => {
+    return {
+        value: stream.readInt16LE(offset),
+        offset: offset + 2
+    }
+}
+
 const decodeNumber = (stream, offset) => {
     return {
         value: stream.readInt32LE(offset),
         offset: offset + 4
+    }
+}
+
+const decodeFloat = (stream, offset) => {
+    return {
+        value: stream.readFloatLE(offset),
+        offset: offset + 4
+    }
+}
+
+const decodeDouble = (stream, offset) => {
+    return {
+        value: stream.readDoubleLE(offset),
+        offset: offset + 8
     }
 }
 
@@ -92,6 +130,22 @@ const decodeValue = (stream, type, offset) => {
         return decodeNumber(stream, offset);
     }
 
+    if (type === nanoNumberType) {
+        return decodeNanoNumber(stream, offset);
+    }
+
+    if (type === smallNumberType) {
+        return decodeSmallNumber(stream, offset);
+    }
+
+    if (type === floatType) {
+        return decodeFloat(stream, offset);
+    }
+
+    if (type === doubleType) {
+        return decodeDouble(stream, offset);
+    }
+
     if (type === arrayType) {
         return decodeArray(stream, offset);
     }
@@ -119,6 +173,10 @@ module.exports = {
     decodeType,
     decodeBoolean,
     decodeNumber,
+    decodeNanoNumber,
+    decodeSmallNumber,
+    decodeFloat,
+    decodeDouble,
     decodeString,
     decodeArray,
     decodeObject,

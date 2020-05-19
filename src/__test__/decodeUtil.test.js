@@ -1,6 +1,29 @@
 const { encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair, encodeArray } = require('../encodeUtils');
-const { decodeType, decodeBoolean, decodeNumber, decodeString, decodeKeyValuePair, decodeArray } = require('../decodeUtils');
-const { booleanType, stringType, numberType, arrayType } = require('../constants');
+const {
+    decodeType,
+    decodeBoolean,
+    decodeNumber,
+    decodeNanoNumber,
+    decodeSmallNumber,
+    decodeFloat,
+    decodeDouble,
+    decodeString,
+    decodeKeyValuePair,
+    decodeArray
+} = require('../decodeUtils');
+
+const { 
+    stringType,
+    booleanType,
+    numberType,
+    objectKey,
+    arrayType,
+    objectType,
+    nanoNumberType,
+    smallNumberType,
+    floatType,
+    doubleType
+} = require('../constants');
 
 describe('decode', () => {
     let buff, result;
@@ -31,9 +54,61 @@ describe('decode', () => {
         });
     });
 
-    describe('when decoding a number', () => {
+    describe('when decoding a nano number', () => {
         beforeEach(() => {
             buff = encodeNumber(Buffer.alloc(0), 6);
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
+            });
+
+            it('should have the correct type', () => {
+                expect(result.value).toBe(nanoNumberType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeNanoNumber(buff, 1);
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe(6);
+            });
+        });
+    });
+
+    describe('when decoding a small number', () => {
+        beforeEach(() => {
+            buff = encodeNumber(Buffer.alloc(0), 230);
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
+            });
+
+            it('should have the correct type', () => {
+                expect(result.value).toBe(smallNumberType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeSmallNumber(buff, 1);
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe(230);
+            });
+        });
+    });
+
+    describe('when decoding a number', () => {
+        beforeEach(() => {
+            buff = encodeNumber(Buffer.alloc(0), 50689);
         });
 
         describe('when decoding the type', () => {
@@ -52,7 +127,59 @@ describe('decode', () => {
             });
 
             it('should have the correct value', () => {
-                expect(result.value).toBe(6);
+                expect(result.value).toBe(50689);
+            });
+        });
+    });
+
+    describe('when decoding a float', () => {
+        beforeEach(() => {
+            buff = encodeNumber(Buffer.alloc(0), 10.5);
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
+            });
+
+            it('should have the correct type', () => {
+                expect(result.value).toBe(floatType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeFloat(buff, 1);
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe(10.5);
+            });
+        });
+    });
+
+    describe('when decoding a double', () => {
+        beforeEach(() => {
+            buff = encodeNumber(Buffer.alloc(0), 50024.4);
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
+            });
+
+            it('should have the correct type', () => {
+                expect(result.value).toBe(doubleType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeDouble(buff, 1);
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe(50024.4);
             });
         });
     });

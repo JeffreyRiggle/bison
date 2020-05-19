@@ -1,5 +1,16 @@
 const { encodeArray, encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair, encodeObject }= require('../encodeUtils');
-const { arrayType, booleanType, stringType, numberType, objectKey, objectType } = require('../constants');
+const { 
+    stringType,
+    booleanType,
+    numberType,
+    objectKey,
+    arrayType,
+    objectType,
+    nanoNumberType,
+    smallNumberType,
+    floatType,
+    doubleType
+} = require('../constants');
 
 describe('encode util', () => {
     let result;
@@ -74,17 +85,59 @@ describe('encode util', () => {
         });
     });
 
-    describe('when a number is provided', () => {
+    describe('when a nano number is provided', () => {
         beforeEach(() => {
             result = encodeNumber(Buffer.alloc(0), 6);
         });
 
         it('should have the correct type', () => {
-            expect(result[0]).toBe(numberType);
+            expect(result[0]).toBe(nanoNumberType);
         });
 
         it('should have the correct value', () => {
-            expect(result.readInt32LE(1)).toBe(6);
+            expect(result.readInt8(1)).toBe(6);
+        });
+    });
+
+    describe('when a small number is provided', () => {
+        beforeEach(() => {
+            result = encodeNumber(Buffer.alloc(0), 2000);
+        });
+
+        it('should have the correct type', () => {
+            expect(result[0]).toBe(smallNumberType);
+        });
+
+        it('should have the correct value', () => {
+            expect(result.readInt16LE(1)).toBe(2000);
+        });
+    });
+
+    describe('when a float number is provided', () => {
+        beforeEach(() => {
+            result = encodeNumber(Buffer.alloc(0), 10.5);
+        });
+
+        it('should have the correct type', () => {
+            expect(result[0]).toBe(floatType);
+        });
+
+        it('should have the correct value', () => {
+            expect(result.readFloatLE(1)).toBe(10.5);
+        });
+    });
+
+    describe('when a double number is provided', () => {
+        beforeEach(() => {
+            result = encodeNumber(Buffer.alloc(0), 50024.4);
+        });
+
+        it('should have the correct type', () => {
+            expect(result[0]).toBe(doubleType);
+        });
+
+        it('should have the correct value', () => {
+            expect(result.readDoubleLE(1)).toBe(50024.4);
         });
     });
 
@@ -117,27 +170,27 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value type', () => {
-                expect(result[2]).toBe(numberType);
+                expect(result[2]).toBe(nanoNumberType);
             });
 
             it('should have the correct first value', () => {
-                expect(result.readInt32LE(3)).toBe(5);
+                expect(result[3]).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result[7]).toBe(numberType);
+                expect(result[4]).toBe(nanoNumberType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.readInt32LE(8)).toBe(8);
+                expect(result[5]).toBe(8);
             });
 
             it('should have the correct third value type', () => {
-                expect(result[12]).toBe(numberType);
+                expect(result[6]).toBe(nanoNumberType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.readInt32LE(13)).toBe(2);
+                expect(result[7]).toBe(2);
             });
         });
 
@@ -235,23 +288,23 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value', () => {
-                expect(result.readInt32LE(5)).toBe(5);
+                expect(result[5]).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result[9]).toBe(arrayType);
+                expect(result[6]).toBe(arrayType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.readInt32LE(12)).toBe(8);
+                expect(result[9]).toBe(8);
             });
 
             it('should have the correct third value type', () => {
-                expect(result[16]).toBe(arrayType);
+                expect(result[10]).toBe(arrayType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.readInt32LE(19)).toBe(2);
+                expect(result[12]).toBe(2);
             });
         });
 
@@ -269,27 +322,27 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value type', () => {
-                expect(result[2]).toBe(numberType);
+                expect(result[2]).toBe(nanoNumberType);
             });
 
             it('should have the correct first value', () => {
-                expect(result.readInt32LE(3)).toBe(5);
+                expect(result[3]).toBe(5);
             });
 
             it('should have the correct second value type', () => {
-                expect(result[7]).toBe(booleanType);
+                expect(result[4]).toBe(booleanType);
             });
 
             it('should have the correct second value', () => {
-                expect(result[8]).toBe(1);
+                expect(result[5]).toBe(1);
             });
 
             it('should have the correct third value type', () => {
-                expect(result[9]).toBe(stringType);
+                expect(result[6]).toBe(stringType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.toString('utf8', 14)).toBe('foo');
+                expect(result.toString('utf8', 11)).toBe('foo');
             });
         });
     });
@@ -312,15 +365,15 @@ describe('encode util', () => {
         });
 
         it('should have the correct first value', () => {
-            expect(result.readInt32LE(8)).toBe(5);
+            expect(result[8]).toBe(5);
         });
 
         it('should have the correct second key', () => {
-            expect(result.toString('utf8', 14, 17)).toBe('bar');
+            expect(result.toString('utf8', 11, 14)).toBe('bar');
         });
 
         it('should have the correct second value', () => {
-            expect(result.toString('utf8', 22)).toBe('foo');
+            expect(result.toString('utf8', 19)).toBe('foo');
         });
     });
 
@@ -383,11 +436,11 @@ describe('encode util', () => {
             });
 
             it('should have the correct value type', () => {
-                expect(result[5]).toBe(numberType);
+                expect(result[5]).toBe(nanoNumberType);
             });
 
             it('should have the correct value', () => {
-                expect(result.readInt32LE(6)).toBe(6);
+                expect(result[6]).toBe(6);
             });
         });
 
@@ -409,7 +462,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct value', () => {
-                expect(result.readInt32LE(8)).toBe(6);
+                expect(result[8]).toBe(6);
             });
         });
 
