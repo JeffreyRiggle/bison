@@ -18,7 +18,9 @@ const {
     decodeString,
     decodeLargeString,
     decodeKeyValuePair,
-    decodeArray
+    decodeSmallArray,
+    decodeArray,
+    decodeLargeArray
 } = require('../decodeUtils');
 
 const {
@@ -28,7 +30,9 @@ const {
     booleanType,
     numberType,
     objectKey,
+    smallArrayType,
     arrayType,
+    largeArrayType,
     objectType,
     nanoNumberType,
     smallNumberType,
@@ -288,9 +292,54 @@ describe('decode', () => {
         });
     });
 
-    describe('when decoding an array', () => {
+    describe('when decoding a small array', () => {
         beforeEach(() => {
             buff = encodeArray(Buffer.alloc(0), [5, true, 'foo']);
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
+            });
+
+            it('should have the correct type', () => {
+                expect(result.value).toBe(smallArrayType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeSmallArray(buff, 1);
+            });
+
+            it('should have the correct length', () => {
+                expect(result.value.length).toBe(3);
+            });
+
+            it('should have the correct first value', () => {
+                expect(result.value[0]).toBe(5);
+            });
+
+            it('should have the correct second value', () => {
+                expect(result.value[1]).toBe(true);
+            });
+
+            it('should have the correct third value', () => {
+                expect(result.value[2]).toBe('foo');
+            });
+        });
+    });
+
+    describe('when decoding an array', () => {
+        let arr;
+
+        beforeEach(() => {
+            arr = [];
+
+            for (let i = 0; i < 130; i++) {
+                arr.push(i);
+            }
+            buff = encodeArray(Buffer.alloc(0), arr);
         });
 
         describe('when decoding the type', () => {
@@ -309,19 +358,40 @@ describe('decode', () => {
             });
 
             it('should have the correct length', () => {
-                expect(result.value.length).toBe(3);
+                expect(result.value.length).toBe(130);
+            });
+        });
+    });
+
+    describe('when decoding a large array', () => {
+        let arr;
+
+        beforeEach(() => {
+            arr = [];
+
+            for (let i = 0; i < 40000; i++) {
+                arr.push(i);
+            }
+            buff = encodeArray(Buffer.alloc(0), arr);
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
             });
 
-            it('should have the correct first value', () => {
-                expect(result.value[0]).toBe(5);
+            it('should have the correct type', () => {
+                expect(result.value).toBe(largeArrayType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeLargeArray(buff, 1);
             });
 
-            it('should have the correct second value', () => {
-                expect(result.value[1]).toBe(true);
-            });
-
-            it('should have the correct third value', () => {
-                expect(result.value[2]).toBe('foo');
+            it('should have the correct length', () => {
+                expect(result.value.length).toBe(40000);
             });
         });
     });

@@ -8,7 +8,9 @@ module.exports = {
     numberType: 6,
     floatType: 7,
     doubleType: 8,
-    arrayType: 9,
-    objectType: 10,
-    objectKey: 11,
+    smallArrayType: 9,
+    arrayType: 10,
+    largeArrayType: 11,
+    objectType: 12,
+    objectKey: 13,
 };

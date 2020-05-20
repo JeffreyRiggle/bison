@@ -6,6 +6,7 @@ const {
     booleanType,
     numberType,
     objectKey,
+    smallArrayType,
     arrayType,
     objectType,
     nanoNumberType,
@@ -164,7 +165,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct type', () => {
-                expect(result[0]).toBe(arrayType);
+                expect(result[0]).toBe(smallArrayType);
             });
 
             it('should have the correct array length', () => {
@@ -202,7 +203,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct type', () => {
-                expect(result[0]).toBe(arrayType);
+                expect(result[0]).toBe(smallArrayType);
             });
 
             it('should have the correct array length', () => {
@@ -240,7 +241,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct type', () => {
-                expect(result[0]).toBe(arrayType);
+                expect(result[0]).toBe(smallArrayType);
             });
 
             it('should have the correct array length', () => {
@@ -278,7 +279,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct type', () => {
-                expect(result[0]).toBe(arrayType);
+                expect(result[0]).toBe(smallArrayType);
             });
 
             it('should have the correct array length', () => {
@@ -286,7 +287,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value type', () => {
-                expect(result[2]).toBe(arrayType);
+                expect(result[2]).toBe(smallArrayType);
             });
 
             it('should have the correct first value', () => {
@@ -294,7 +295,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct second value type', () => {
-                expect(result[6]).toBe(arrayType);
+                expect(result[6]).toBe(smallArrayType);
             });
 
             it('should have the correct second value', () => {
@@ -302,7 +303,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct third value type', () => {
-                expect(result[10]).toBe(arrayType);
+                expect(result[10]).toBe(smallArrayType);
             });
 
             it('should have the correct third value', () => {
@@ -316,7 +317,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct type', () => {
-                expect(result[0]).toBe(arrayType);
+                expect(result[0]).toBe(smallArrayType);
             });
 
             it('should have the correct array length', () => {
@@ -460,7 +461,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct value type', () => {
-                expect(result[5]).toBe(arrayType);
+                expect(result[5]).toBe(smallArrayType);
             });
 
             it('should have the correct value', () => {

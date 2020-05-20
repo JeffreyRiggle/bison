@@ -5,7 +5,9 @@ const {
     booleanType,
     numberType,
     objectKey,
+    smallArrayType,
     arrayType,
+    largeArrayType,
     objectType,
     nanoNumberType,
     smallNumberType,
@@ -111,10 +113,7 @@ const encodeNumber = (stream, num) => {
 };
 
 const encodeArray = (stream, value) => {
-    const rootBuff = Buffer.alloc(2);
-    rootBuff.writeInt8(arrayType, 0);
-    rootBuff.writeInt8(value.length, 1);
-
+    const rootBuff = handleLength(value, smallArrayType, arrayType, largeArrayType)
     const buffs = [];
 
     value.forEach(arrValue => {

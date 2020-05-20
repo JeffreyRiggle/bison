@@ -4,7 +4,9 @@ const {
     largeStringType,
     booleanType,
     numberType,
+    smallArrayType,
     arrayType,
+    largeArrayType,
     objectType,
     nanoNumberType,
     smallNumberType,
@@ -97,9 +99,23 @@ const decodeDouble = (stream, offset) => {
     }
 }
 
+const decodeSmallArray = (stream, offset) => {
+    const len = stream.readInt8(offset);
+    return decodeArrayImpl(stream, offset + 1, len);
+};
+
 const decodeArray = (stream, offset) => {
+    const len = stream.readInt16LE(offset);
+    return decodeArrayImpl(stream, offset + 2, len);
+};
+
+const decodeLargeArray = (stream, offset) => {
+    const len = stream.readInt32LE(offset);
+    return decodeArrayImpl(stream, offset + 4, len);
+};
+
+const decodeArrayImpl = (stream, offset, len) => {
     let curr = offset;
-    const len = stream.readInt8(curr++);
     let iter = 0;
     const retVal = [];
 
@@ -174,8 +190,16 @@ const decodeValue = (stream, type, offset) => {
         return decodeDouble(stream, offset);
     }
 
+    if (type === smallArrayType) {
+        return decodeSmallArray(stream, offset);
+    }
+
     if (type === arrayType) {
         return decodeArray(stream, offset);
+    }
+
+    if (type === largeArrayType) {
+        return decodeLargeArray(stream, offset);
     }
 
     if (type === objectType) {
@@ -208,7 +232,9 @@ module.exports = {
     decodeSmallString,
     decodeString,
     decodeLargeString,
+    decodeSmallArray,
     decodeArray,
+    decodeLargeArray,
     decodeObject,
     decodeKeyValuePair
 };
