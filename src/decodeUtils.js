@@ -1,5 +1,7 @@
-const { 
+const {
+    smallStringType,
     stringType,
+    largeStringType,
     booleanType,
     numberType,
     arrayType,
@@ -26,7 +28,25 @@ const decodePropertyString = (stream, offset) => {
     };
 }
 
+const decodeSmallString = (stream, offset) => {
+    const stringLen = stream.readInt8(offset);
+
+    return {
+        value: stream.toString('utf8', offset + 1, offset + stringLen + 1),
+        offset: offset + stringLen + 1
+    };
+}
+
 const decodeString = (stream, offset) => {
+    const stringLen = stream.readInt16LE(offset);
+
+    return {
+        value: stream.toString('utf8', offset + 2, offset + stringLen + 2),
+        offset: offset + stringLen + 2
+    };
+}
+
+const decodeLargeString = (stream, offset) => {
     const stringLen = stream.readInt32LE(offset);
 
     return {
@@ -122,8 +142,16 @@ const decodeValue = (stream, type, offset) => {
         return decodeBoolean(stream, offset);
     }
 
+    if (type === smallStringType) {
+        return decodeSmallString(stream, offset);
+    }
+
     if (type === stringType) {
         return decodeString(stream, offset);
+    }
+
+    if (type === largeStringType) {
+        return decodeLargeString(stream, offset);
     }
 
     if (type === numberType) {
@@ -177,7 +205,9 @@ module.exports = {
     decodeSmallNumber,
     decodeFloat,
     decodeDouble,
+    decodeSmallString,
     decodeString,
+    decodeLargeString,
     decodeArray,
     decodeObject,
     decodeKeyValuePair

@@ -1,5 +1,7 @@
-const { 
+const {
+    smallStringType,
     stringType,
+    largeStringType,
     booleanType,
     numberType,
     objectKey,
@@ -11,13 +13,39 @@ const {
     doubleType
 } = require('./constants');
 
-const encodeString = (stream, str) => {
-    const buff = Buffer.alloc(str.length + 5);
-    buff.writeInt8(stringType, 0);
-    buff.writeInt32LE(str.length, 1);
-    buff.write(str, 5);
+const handleLength = (obj, small, medium, large) => {
+    const len = obj.length;
 
-    return Buffer.concat([stream, buff]);
+    if (len < 127) {
+        const buff = Buffer.alloc(2);
+        buff.writeInt8(small, 0);
+        buff.writeInt8(len, 1);
+
+        return buff;
+    }
+    
+    if (len < 32768) {
+        const buff = Buffer.alloc(3);
+        buff.writeInt8(medium, 0);
+        buff.writeInt16LE(len, 1);
+
+        return buff;
+    }
+
+
+    const buff = Buffer.alloc(5);
+    buff.writeInt8(large, 0);
+    buff.writeInt32LE(len, 1);
+
+    return buff;
+};
+
+const encodeString = (stream, str) => {
+    const buff = Buffer.alloc(str.length);
+    buff.write(str);
+    const buffWithSize = Buffer.concat([handleLength(str, smallStringType, stringType, largeStringType), buff]);
+
+    return Buffer.concat([stream, buffWithSize]);
 }
 
 const encodeBoolean = (stream, boolean) => {

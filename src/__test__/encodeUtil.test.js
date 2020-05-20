@@ -1,6 +1,8 @@
 const { encodeArray, encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair, encodeObject }= require('../encodeUtils');
-const { 
+const {
+    smallStringType,
     stringType,
+    largeStringType,
     booleanType,
     numberType,
     objectKey,
@@ -53,15 +55,15 @@ describe('encode util', () => {
         });
 
         it('should have the correct type', () => {
-            expect(result[0]).toBe(stringType);
+            expect(result[0]).toBe(smallStringType);
         });
 
         it('should have the correct length', () => {
-            expect(result.readInt32LE(1)).toBe(original.length);
+            expect(result[1]).toBe(original.length);
         });
 
         it('should have the correct string', () => {
-            expect(result.toString('utf8', 5)).toBe(original);
+            expect(result.toString('utf8', 2)).toBe(original);
         });
     });
 
@@ -77,11 +79,11 @@ describe('encode util', () => {
         });
 
         it('should have the correct length', () => {
-            expect(result.readInt32LE(1)).toBe(original.length);
+            expect(result.readInt16LE(1)).toBe(original.length);
         });
 
         it('should have the correct string', () => {
-            expect(result.toString('utf8', 5)).toBe(original);
+            expect(result.toString('utf8', 3)).toBe(original);
         });
     });
 
@@ -246,27 +248,27 @@ describe('encode util', () => {
             });
 
             it('should have the correct first value type', () => {
-                expect(result[2]).toBe(stringType);
+                expect(result[2]).toBe(smallStringType);
             });
 
             it('should have the correct first value', () => {
-                expect(result.toString('utf8', 7, 10)).toBe('foo');
+                expect(result.toString('utf8', 4, 7)).toBe('foo');
             });
 
             it('should have the correct second value type', () => {
-                expect(result[10]).toBe(stringType);
+                expect(result[7]).toBe(smallStringType);
             });
 
             it('should have the correct second value', () => {
-                expect(result.toString('utf8', 15, 18)).toBe('bar');
+                expect(result.toString('utf8', 9, 12)).toBe('bar');
             });
 
             it('should have the correct third value type', () => {
-                expect(result[18]).toBe(stringType);
+                expect(result[12]).toBe(smallStringType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.toString('utf8', 23, 26)).toBe('baz');
+                expect(result.toString('utf8', 14, 17)).toBe('baz');
             });
         })
 
@@ -304,7 +306,7 @@ describe('encode util', () => {
             });
 
             it('should have the correct third value', () => {
-                expect(result[12]).toBe(2);
+                expect(result[13]).toBe(2);
             });
         });
 
@@ -338,11 +340,11 @@ describe('encode util', () => {
             });
 
             it('should have the correct third value type', () => {
-                expect(result[6]).toBe(stringType);
+                expect(result[6]).toBe(smallStringType);
             });
 
             it('should have the correct third value', () => {
-                expect(result.toString('utf8', 11)).toBe('foo');
+                expect(result.toString('utf8', 8)).toBe('foo');
             });
         });
     });
@@ -373,7 +375,7 @@ describe('encode util', () => {
         });
 
         it('should have the correct second value', () => {
-            expect(result.toString('utf8', 19)).toBe('foo');
+            expect(result.toString('utf8', 16)).toBe('foo');
         });
     });
 
@@ -392,11 +394,11 @@ describe('encode util', () => {
             });
 
             it('should have the correct value type', () => {
-                expect(result[5]).toBe(stringType);
+                expect(result[5]).toBe(smallStringType);
             });
 
             it('should have the correct value', () => {
-                expect(result.toString('utf8', 10)).toBe('bar');
+                expect(result.toString('utf8', 7)).toBe('bar');
             });
         });
 

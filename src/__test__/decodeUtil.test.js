@@ -1,4 +1,11 @@
-const { encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair, encodeArray } = require('../encodeUtils');
+const {
+    encodeBoolean,
+    encodeNumber,
+    encodeString,
+    encodeKeyValuePair,
+    encodeArray
+} = require('../encodeUtils');
+
 const {
     decodeType,
     decodeBoolean,
@@ -7,13 +14,17 @@ const {
     decodeSmallNumber,
     decodeFloat,
     decodeDouble,
+    decodeSmallString,
     decodeString,
+    decodeLargeString,
     decodeKeyValuePair,
     decodeArray
 } = require('../decodeUtils');
 
-const { 
+const {
+    smallStringType,
     stringType,
+    largeStringType,
     booleanType,
     numberType,
     objectKey,
@@ -184,9 +195,43 @@ describe('decode', () => {
         });
     });
 
-    describe('when decoding a string', () => {
+    // TODO string and large string
+    describe('when decoding a small string', () => {
         beforeEach(() => {
             buff = encodeString(Buffer.alloc(0), 'foo');
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
+            });
+
+            it('should have the correct type', () => {
+                expect(result.value).toBe(smallStringType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeSmallString(buff, 1);
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe('foo');
+            });
+        });
+    });
+
+    describe('when decoding a string', () => {
+        let str;
+
+        beforeEach(() => {
+            str = '';
+            for (let iter = 0; iter < 130; iter++) {
+                str += iter;
+            }
+
+            buff = encodeString(Buffer.alloc(0), str);
         });
 
         describe('when decoding the type', () => {
@@ -205,7 +250,40 @@ describe('decode', () => {
             });
 
             it('should have the correct value', () => {
-                expect(result.value).toBe('foo');
+                expect(result.value).toBe(str);
+            });
+        });
+    });
+
+    describe('when decoding a large string', () => {
+        let str;
+
+        beforeEach(() => {
+            str = '';
+            for (let iter = 0; iter < 10000; iter++) {
+                str += iter;
+            }
+
+            buff = encodeString(Buffer.alloc(0), str);
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
+            });
+
+            it('should have the correct type', () => {
+                expect(result.value).toBe(largeStringType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeLargeString(buff, 1);
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value).toBe(str);
             });
         });
     });
