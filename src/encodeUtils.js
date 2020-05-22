@@ -14,7 +14,8 @@ const {
     nanoNumberType,
     smallNumberType,
     floatType,
-    doubleType
+    doubleType,
+    dateType
 } = require('./constants');
 
 const handleLength = (obj, small, medium, large) => {
@@ -170,11 +171,20 @@ const encodeKeyValuePair = (stream, key, value) => {
     return Buffer.concat([stream, encodeValue(buff, value)])
 };
 
+const encodeDate = (stream, date) => {
+    const buff = Buffer.alloc(9);
+    buff.writeInt8(dateType);
+    buff.writeBigUInt64LE(BigInt(date.getTime()), 1);
+    
+    return Buffer.concat([stream, buff]);
+}
+
 module.exports = {
     encodeBoolean,
     encodeNumber,
     encodeString,
     encodeArray,
     encodeObject,
-    encodeKeyValuePair
+    encodeKeyValuePair,
+    encodeDate
 };

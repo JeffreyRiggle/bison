@@ -169,6 +169,13 @@ const decodeObjectImpl = (stream, offset, len) => {
     };
 };
 
+const decodeDate = (stream, offset) => {
+    return {
+        value: new Date(Number(stream.readBigUInt64LE(offset))),
+        offset: offset + 8
+    }
+};
+
 const decodeValue = (stream, type, offset) => {
     if (type === booleanType) {
         return decodeBoolean(stream, offset);
@@ -230,6 +237,10 @@ const decodeValue = (stream, type, offset) => {
         return decodeLargeObject(stream, offset);
     }
 
+    if (type === dateType) {
+        return decodeDate(stream, offset);
+    }
+
     throw new Error(`Unknown type ${type}`);
 }
 
@@ -262,5 +273,6 @@ module.exports = {
     decodeSmallObject,
     decodeObject,
     decodeLargeObject,
-    decodeKeyValuePair
+    decodeKeyValuePair,
+    decodeDate
 };

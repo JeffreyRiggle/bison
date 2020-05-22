@@ -1,4 +1,4 @@
-const { encodeArray, encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair, encodeObject }= require('../encodeUtils');
+const { encodeArray, encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair, encodeObject, encodeDate }= require('../encodeUtils');
 const {
     smallStringType,
     stringType,
@@ -10,7 +10,8 @@ const {
     nanoNumberType,
     smallNumberType,
     floatType,
-    doubleType
+    doubleType,
+    dateType
 } = require('../constants');
 
 describe('encode util', () => {
@@ -481,6 +482,23 @@ describe('encode util', () => {
             it('should throw', () => {
                 expect(thrown).toBe(true);
             });
+        });
+    });
+
+    describe('when a date is provided', () => {
+        let d;
+
+        beforeEach(() => {
+            d = new Date();
+            result = encodeDate(Buffer.alloc(0), d);
+        });
+
+        it('should have the correct type', () => {
+            expect(result[0]).toBe(dateType);
+        });
+
+        it('should have the correct value', () => {
+            expect(result.readBigUInt64LE(1)).toBe(BigInt(d.getTime()));
         });
     });
 });

@@ -15,4 +15,5 @@ module.exports = {
     objectType: 13,
     largeObjectType: 14,
     objectKey: 15,
+    dateType: 16
 };

@@ -3,7 +3,8 @@ const {
     encodeNumber,
     encodeString,
     encodeKeyValuePair,
-    encodeArray
+    encodeArray,
+    encodeDate,
 } = require('../encodeUtils');
 
 const {
@@ -20,7 +21,8 @@ const {
     decodeKeyValuePair,
     decodeSmallArray,
     decodeArray,
-    decodeLargeArray
+    decodeLargeArray,
+    decodeDate
 } = require('../decodeUtils');
 
 const {
@@ -35,7 +37,8 @@ const {
     nanoNumberType,
     smallNumberType,
     floatType,
-    doubleType
+    doubleType,
+    dateType
 } = require('../constants');
 
 describe('decode', () => {
@@ -193,6 +196,35 @@ describe('decode', () => {
 
             it('should have the correct value', () => {
                 expect(result.value).toBe(50024.4);
+            });
+        });
+    });
+
+    describe('when decoding a date', () => {
+        let d;
+
+        beforeEach(() => {
+            d = new Date();
+            buff = encodeDate(Buffer.alloc(0), d);
+        });
+
+        describe('when decoding the type', () => {
+            beforeEach(() => {
+                result = decodeType(buff, 0);
+            });
+
+            it('should have the correct type', () => {
+                expect(result.value).toBe(dateType);
+            });
+        });
+
+        describe('when decoding the value', () => {
+            beforeEach(() => {
+                result = decodeDate(buff, 1);
+            });
+
+            it('should have the correct value', () => {
+                expect(result.value.getTime()).toBe(d.getTime());
             });
         });
     });
