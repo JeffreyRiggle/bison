@@ -469,6 +469,31 @@ describe('encode util', () => {
       })
     })
 
+    describe('and value is an date', () => {
+      let d
+
+      beforeEach(() => {
+        d = new Date()
+        result = encodeKeyValuePair(Buffer.alloc(0), 'foo', d)
+      })
+
+      it('should have the correct type for object', () => {
+        expect(result[0]).toBe(objectKey)
+      })
+
+      it('should have the correct property key', () => {
+        expect(result.toString('utf8', 2, 5)).toBe('foo')
+      })
+
+      it('should have the correct value type', () => {
+        expect(result[5]).toBe(dateType)
+      })
+
+      it('should have the correct value', () => {
+        expect(result.readBigUInt64LE(6)).toBe(BigInt(d.getTime()))
+      })
+    })
+
     describe('and value is function', () => {
       let thrown
       beforeEach(() => {

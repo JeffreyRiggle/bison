@@ -154,6 +154,10 @@ const encodeValue = (stream, value, offset) => {
     return encodeArray(stream, value, offset)
   }
 
+  if (value instanceof Date) {
+    return encodeDate(stream, value, offset)
+  }
+
   if (typeof value === 'object') {
     return encodeObject(stream, value, offset)
   }
