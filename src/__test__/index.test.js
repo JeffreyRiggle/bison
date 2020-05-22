@@ -130,4 +130,70 @@ describe('JSON conversion', () => {
       })
     })
   })
+
+  describe('when array is provided', () => {
+    beforeEach(() => {
+      original = [230]
+
+      encodedResult = encode(original)
+    })
+
+    it('should create a buffer', () => {
+      expect(Buffer.isBuffer(encodedResult)).toBe(true)
+    })
+
+    describe('when decodeded', () => {
+      beforeEach(() => {
+        result = decode(encodedResult)
+      })
+
+      it('should have the correct value', () => {
+        expect(result[0]).toBe(230)
+      })
+    })
+  })
+
+  describe('when number is provided', () => {
+    beforeEach(() => {
+      original = 230
+
+      encodedResult = encode(original)
+    })
+
+    it('should create a buffer', () => {
+      expect(Buffer.isBuffer(encodedResult)).toBe(true)
+    })
+
+    describe('when decodeded', () => {
+      beforeEach(() => {
+        result = decode(encodedResult)
+      })
+
+      it('should have the correct value', () => {
+        expect(result).toBe(230)
+      })
+    })
+  })
+
+  describe('when string is provided', () => {
+    beforeEach(() => {
+      original = 'foobar'
+
+      encodedResult = encode(original)
+    })
+
+    it('should create a buffer', () => {
+      expect(Buffer.isBuffer(encodedResult)).toBe(true)
+    })
+
+    describe('when decodeded', () => {
+      beforeEach(() => {
+        result = decode(encodedResult)
+      })
+
+      it('should have the correct value', () => {
+        expect(result).toBe('foobar')
+      })
+    })
+  })
 })

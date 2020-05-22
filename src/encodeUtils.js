@@ -189,5 +189,6 @@ module.exports = {
   encodeArray,
   encodeObject,
   encodeKeyValuePair,
-  encodeDate
+  encodeDate,
+  encodeValue
 }

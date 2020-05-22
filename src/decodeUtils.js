@@ -275,5 +275,6 @@ module.exports = {
   decodeObject,
   decodeLargeObject,
   decodeKeyValuePair,
-  decodeDate
+  decodeDate,
+  decodeValue
 }
