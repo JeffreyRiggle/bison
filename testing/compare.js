@@ -16,7 +16,7 @@ const obs = new PerformanceObserver((list, observer) => {
 obs.observe({ entryTypes: ['measure'], buffered: true });
 
 async function lazy() {
-    console.log(`Evaluating ${JSON.stringify(input)} lazy`);
+    console.log(`Evaluating lazy`);
     performance.mark('encodeLazyStart');
     const result = lazyEncode(input);
     performance.mark('encodeLazyStop');
@@ -29,7 +29,7 @@ async function lazy() {
 }
 
 async function compress() {
-    console.log(`Evaluating ${JSON.stringify(input)}`);
+    console.log(`Evaluating`);
     performance.mark('encodeStart');
     const result = encode(input);
     performance.mark('encodeStop');

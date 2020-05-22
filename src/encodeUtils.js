@@ -8,7 +8,9 @@ const {
     smallArrayType,
     arrayType,
     largeArrayType,
+    smallObjectType,
     objectType,
+    largeObjectType,
     nanoNumberType,
     smallNumberType,
     floatType,
@@ -124,10 +126,8 @@ const encodeArray = (stream, value) => {
 };
 
 const encodeObject = (stream, value) => {
-    const buff = Buffer.alloc(2);
     const keys = Object.keys(value);
-    buff.writeInt8(objectType);
-    buff.writeInt8(keys.length, 1);
+    const buff = handleLength(keys, smallObjectType, objectKey, largeObjectType);
     const buffs = [];
 
     keys.forEach(key => {

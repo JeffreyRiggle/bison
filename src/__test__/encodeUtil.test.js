@@ -2,13 +2,11 @@ const { encodeArray, encodeBoolean, encodeNumber, encodeString, encodeKeyValuePa
 const {
     smallStringType,
     stringType,
-    largeStringType,
     booleanType,
     numberType,
     objectKey,
     smallArrayType,
-    arrayType,
-    objectType,
+    smallObjectType,
     nanoNumberType,
     smallNumberType,
     floatType,
@@ -356,7 +354,7 @@ describe('encode util', () => {
         });
 
         it('should have the correct type', () => {
-            expect(result[0]).toBe(objectType);
+            expect(result[0]).toBe(smallObjectType);
         });
 
         it('should have the correct length', () => {

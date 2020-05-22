@@ -6,6 +6,8 @@
   "scripts": {
     "test": "jest",
     "perf:small": "node ./testing/compare.js ./small.json",
+    "perf:med": "node ./testing/compare.js ./medium.json",
+    "perf:large": "node ./testing/compare.js ./large.json",
     "perf:nano": "node ./testing/compare.js ./nano.json"
   },
   "repository": {

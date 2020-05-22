@@ -7,7 +7,9 @@ const {
     smallArrayType,
     arrayType,
     largeArrayType,
+    smallObjectType,
     objectType,
+    largeObjectType,
     nanoNumberType,
     smallNumberType,
     floatType,
@@ -133,9 +135,23 @@ const decodeArrayImpl = (stream, offset, len) => {
     };
 };
 
+const decodeSmallObject = (stream, offset) => {
+    const len = stream.readInt8(offset);
+    return decodeObjectImpl(stream, offset + 1, len);
+}
+
 const decodeObject = (stream, offset) => {
+    const len = stream.readInt16LE(offset);
+    return decodeObjectImpl(stream, offset + 2, len);
+}
+
+const decodeLargeObject = (stream, offset) => {
+    const len = stream.readInt32LE(offset);
+    return decodeObjectImpl(stream, offset + 4, len);
+}
+
+const decodeObjectImpl = (stream, offset, len) => {
     let curr = offset;
-    const len = stream.readInt8(curr++);
     let retVal = {};
     let iter = 0;
 
@@ -202,8 +218,16 @@ const decodeValue = (stream, type, offset) => {
         return decodeLargeArray(stream, offset);
     }
 
+    if (type === smallObjectType) {
+        return decodeSmallObject(stream, offset);
+    }
+
     if (type === objectType) {
         return decodeObject(stream, offset);
+    }
+
+    if (type === largeObjectType) {
+        return decodeLargeObject(stream, offset);
     }
 
     throw new Error(`Unknown type ${type}`);
@@ -235,6 +259,8 @@ module.exports = {
     decodeSmallArray,
     decodeArray,
     decodeLargeArray,
+    decodeSmallObject,
     decodeObject,
+    decodeLargeObject,
     decodeKeyValuePair
 };

@@ -11,6 +11,8 @@ module.exports = {
     smallArrayType: 9,
     arrayType: 10,
     largeArrayType: 11,
-    objectType: 12,
-    objectKey: 13,
+    smallObjectType: 12,
+    objectType: 13,
+    largeObjectType: 14,
+    objectKey: 15,
 };
