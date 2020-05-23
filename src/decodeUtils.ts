@@ -1,4 +1,4 @@
-const {
+import {
   smallStringType,
   stringType,
   largeStringType,
@@ -15,7 +15,7 @@ const {
   floatType,
   doubleType,
   dateType
-} = require('./constants')
+} from './constants'
 
 interface IDecodeResult {
   value: any;

@@ -1,5 +1,4 @@
-/* global BigInt */
-const {
+import {
   smallStringType,
   stringType,
   largeStringType,
@@ -16,7 +15,7 @@ const {
   floatType,
   doubleType,
   dateType
-} = require('./constants')
+} from './constants'
 
 interface Sizable {
   length: number;

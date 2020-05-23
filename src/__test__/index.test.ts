@@ -1,5 +1,4 @@
-/* global describe, beforeEach, it, expect */
-const { encode, decode } = require('../index')
+import { encode, decode } from '../index'
 
 describe('JSON conversion', () => {
   let encodedResult: Buffer

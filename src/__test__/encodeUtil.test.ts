@@ -1,6 +1,14 @@
-/* global BigInt, describe, beforeEach, it, expect */
-const { encodeArray, encodeBoolean, encodeNumber, encodeString, encodeKeyValuePair, encodeObject, encodeDate } = require('../encodeUtils')
-const {
+import {
+  encodeArray,
+  encodeBoolean,
+  encodeNumber,
+  encodeString,
+  encodeKeyValuePair,
+  encodeObject,
+  encodeDate
+} from '../encodeUtils'
+
+import {
   smallStringType,
   stringType,
   booleanType,
@@ -13,7 +21,7 @@ const {
   floatType,
   doubleType,
   dateType
-} = require('../constants')
+} from '../constants'
 
 describe('encode util', () => {
   let result: any

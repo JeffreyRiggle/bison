@@ -1,5 +1,5 @@
-const { encodeValue } =  require('./encodeUtils')
-const { decodeType, decodeValue } = require('./decodeUtils')
+import { encodeValue } from './encodeUtils'
+import { decodeType, decodeValue } from './decodeUtils'
 
 export const encode = (json: any) => {
   return encodeValue(Buffer.alloc(0), json)

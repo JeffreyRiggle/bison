@@ -1,14 +1,13 @@
-/* global describe, beforeEach, it, expect */
-const {
+import {
   encodeBoolean,
   encodeNumber,
   encodeString,
   encodeKeyValuePair,
   encodeArray,
   encodeDate
-} = require('../encodeUtils')
+} from '../encodeUtils'
 
-const {
+import {
   decodeType,
   decodeBoolean,
   decodeNumber,
@@ -24,9 +23,9 @@ const {
   decodeArray,
   decodeLargeArray,
   decodeDate
-} = require('../decodeUtils')
+} from '../decodeUtils'
 
-const {
+import {
   smallStringType,
   stringType,
   largeStringType,
@@ -40,7 +39,7 @@ const {
   floatType,
   doubleType,
   dateType
-} = require('../constants')
+} from '../constants'
 
 describe('decode', () => {
   let buff: Buffer
@@ -48,7 +47,7 @@ describe('decode', () => {
 
   describe('when decoding a boolean', () => {
     beforeEach(() => {
-      buff = encodeBoolean(Buffer.alloc(0), true, 0)
+      buff = encodeBoolean(Buffer.alloc(0), true)
     })
 
     describe('when decoding the type', () => {
