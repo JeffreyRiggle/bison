@@ -4,14 +4,17 @@
   "description": "JSON to binary",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:ci": "jest --coverage",
+    "build:web": "tsc --project ./tsconfig-esm.json",
+    "build:node": "tsc --project ./tsconfig-cjs.json",
+    "build": "npm run build:web && npm run build:node",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "perf:small": "node ./testing/compare.js ./small.json",
     "perf:med": "node ./testing/compare.js ./medium.json",
     "perf:large": "node ./testing/compare.js ./large.json",
-    "perf:nano": "node ./testing/compare.js ./nano.json"
+    "perf:nano": "node ./testing/compare.js ./nano.json",
+    "test": "jest",
+    "test:ci": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -27,12 +30,16 @@
   },
   "homepage": "https://github.com/JeffreyRiggle/bison#readme",
   "devDependencies": {
+    "@babel/types": "^7.9.6",
+    "@types/jest": "^25.2.3",
     "eslint": "^7.0.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^26.0.1"
+    "jest": "^26.0.1",
+    "ts-jest": "^26.0.0",
+    "typescript": "^3.9.3"
   }
 }

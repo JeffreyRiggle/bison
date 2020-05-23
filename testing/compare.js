@@ -1,5 +1,5 @@
 const { performance, PerformanceObserver } = require('perf_hooks')
-const { encode, decode } = require('../src/index')
+const { encode, decode } = require('../dist/cjs/index')
 const input = require(process.argv[2])
 
 const lazyEncode = (json) => {

@@ -7,5 +7,6 @@ module.exports = {
       lines: 80,
       statements: -20
     }
-  }
+  },
+  preset: 'ts-jest'
 }

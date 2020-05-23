@@ -16,7 +16,7 @@ const {
 } = require('../constants')
 
 describe('encode util', () => {
-  let result
+  let result: any
 
   describe('when a boolean is provided', () => {
     describe('when value is true', () => {
@@ -470,7 +470,7 @@ describe('encode util', () => {
     })
 
     describe('and value is an date', () => {
-      let d
+      let d: Date
 
       beforeEach(() => {
         d = new Date()
@@ -495,7 +495,8 @@ describe('encode util', () => {
     })
 
     describe('and value is function', () => {
-      let thrown
+      let thrown: boolean
+
       beforeEach(() => {
         try {
           result = encodeKeyValuePair(Buffer.alloc(0), 'foo', () => {})
@@ -512,7 +513,7 @@ describe('encode util', () => {
   })
 
   describe('when a date is provided', () => {
-    let d
+    let d: Date
 
     beforeEach(() => {
       d = new Date()

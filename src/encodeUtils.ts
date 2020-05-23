@@ -18,7 +18,11 @@ const {
   dateType
 } = require('./constants')
 
-const handleLength = (obj, small, medium, large) => {
+interface Sizable {
+  length: number;
+}
+
+const handleLength = (obj: Sizable, small: number, medium: number, large: number): Buffer => {
   const len = obj.length
 
   if (len < 127) {
@@ -44,7 +48,7 @@ const handleLength = (obj, small, medium, large) => {
   return buff
 }
 
-const encodeString = (stream, str) => {
+const encodeString = (stream: Buffer, str: string): Buffer => {
   const buff = Buffer.alloc(str.length)
   buff.write(str)
   const buffWithSize = Buffer.concat([handleLength(str, smallStringType, stringType, largeStringType), buff])
@@ -52,7 +56,7 @@ const encodeString = (stream, str) => {
   return Buffer.concat([stream, buffWithSize])
 }
 
-const encodeBoolean = (stream, boolean) => {
+const encodeBoolean = (stream: Buffer, boolean: boolean): Buffer => {
   const buff = Buffer.alloc(2)
   buff.writeInt8(booleanType)
   buff.writeInt8(boolean ? 1 : 0, 1)
@@ -60,7 +64,7 @@ const encodeBoolean = (stream, boolean) => {
   return Buffer.concat([stream, buff])
 }
 
-const encodeNanoNumber = (stream, num) => {
+const encodeNanoNumber = (stream: Buffer, num: number): Buffer => {
   const buff = Buffer.alloc(2)
   buff.writeInt8(nanoNumberType)
   buff.writeInt8(num, 1)
@@ -68,7 +72,7 @@ const encodeNanoNumber = (stream, num) => {
   return Buffer.concat([stream, buff])
 }
 
-const encodeFloat = (stream, num) => {
+const encodeFloat = (stream: Buffer, num: number): Buffer => {
   const buff = Buffer.alloc(5)
   buff.writeInt8(floatType)
   buff.writeFloatLE(num, 1)
@@ -76,7 +80,7 @@ const encodeFloat = (stream, num) => {
   return Buffer.concat([stream, buff])
 }
 
-const encodeSmallNumber = (stream, num) => {
+const encodeSmallNumber = (stream: Buffer, num: number): Buffer => {
   const buff = Buffer.alloc(3)
   buff.writeInt8(smallNumberType)
   buff.writeInt16LE(num, 1)
@@ -84,7 +88,7 @@ const encodeSmallNumber = (stream, num) => {
   return Buffer.concat([stream, buff])
 }
 
-const encodeDouble = (stream, num) => {
+const encodeDouble = (stream: Buffer, num: number): Buffer => {
   const buff = Buffer.alloc(9)
   buff.writeInt8(doubleType)
   buff.writeDoubleLE(num, 1)
@@ -92,7 +96,7 @@ const encodeDouble = (stream, num) => {
   return Buffer.concat([stream, buff])
 }
 
-const encodeLargeNumber = (stream, num) => {
+const encodeLargeNumber = (stream: Buffer, num: number): Buffer => {
   const buff = Buffer.alloc(5)
   buff.writeInt8(numberType)
   buff.writeInt32LE(num, 1)
@@ -100,7 +104,7 @@ const encodeLargeNumber = (stream, num) => {
   return Buffer.concat([stream, buff])
 }
 
-const encodeNumber = (stream, num) => {
+const encodeNumber = (stream: Buffer, num: number): Buffer => {
   const isDecimal = !Number.isInteger(num)
 
   if (num < 128) {
@@ -114,9 +118,9 @@ const encodeNumber = (stream, num) => {
   return isDecimal ? encodeDouble(stream, num) : encodeLargeNumber(stream, num)
 }
 
-const encodeArray = (stream, value) => {
+const encodeArray = (stream: Buffer, value: any[]): Buffer => {
   const rootBuff = handleLength(value, smallArrayType, arrayType, largeArrayType)
-  const buffs = []
+  const buffs: Buffer[] = []
 
   value.forEach(arrValue => {
     buffs.push(encodeValue(Buffer.alloc(0), arrValue))
@@ -125,10 +129,10 @@ const encodeArray = (stream, value) => {
   return Buffer.concat([stream, rootBuff, ...buffs])
 }
 
-const encodeObject = (stream, value) => {
+const encodeObject = (stream: Buffer, value: any): Buffer => {
   const keys = Object.keys(value)
   const buff = handleLength(keys, smallObjectType, objectKey, largeObjectType)
-  const buffs = []
+  const buffs: Buffer[] = []
 
   keys.forEach(key => {
     buffs.push(encodeKeyValuePair(Buffer.alloc(0), key, value[key]))
@@ -137,35 +141,35 @@ const encodeObject = (stream, value) => {
   return Buffer.concat([stream, buff, ...buffs])
 }
 
-const encodeValue = (stream, value, offset) => {
+const encodeValue = (stream: Buffer, value: any): Buffer => {
   if (typeof value === 'boolean') {
-    return encodeBoolean(stream, value, offset)
+    return encodeBoolean(stream, value)
   }
 
   if (typeof value === 'string') {
-    return encodeString(stream, value, offset)
+    return encodeString(stream, value)
   }
 
   if (typeof value === 'number') {
-    return encodeNumber(stream, value, offset)
+    return encodeNumber(stream, value)
   }
 
   if (Array.isArray(value)) {
-    return encodeArray(stream, value, offset)
+    return encodeArray(stream, value)
   }
 
   if (value instanceof Date) {
-    return encodeDate(stream, value, offset)
+    return encodeDate(stream, value)
   }
 
   if (typeof value === 'object') {
-    return encodeObject(stream, value, offset)
+    return encodeObject(stream, value)
   }
 
   throw new Error(`Unkown type for ${typeof value}`)
 }
 
-const encodeKeyValuePair = (stream, key, value) => {
+const encodeKeyValuePair = (stream: Buffer, key: string, value: any): Buffer => {
   const buff = Buffer.alloc(key.length + 2)
   buff.writeInt8(objectKey)
   buff.writeInt8(key.length, 1)
@@ -174,7 +178,7 @@ const encodeKeyValuePair = (stream, key, value) => {
   return Buffer.concat([stream, encodeValue(buff, value)])
 }
 
-const encodeDate = (stream, date) => {
+const encodeDate = (stream: Buffer, date: Date): Buffer => {
   const buff = Buffer.alloc(9)
   buff.writeInt8(dateType)
   buff.writeBigUInt64LE(BigInt(date.getTime()), 1)
@@ -182,7 +186,7 @@ const encodeDate = (stream, date) => {
   return Buffer.concat([stream, buff])
 }
 
-module.exports = {
+export {
   encodeBoolean,
   encodeNumber,
   encodeString,

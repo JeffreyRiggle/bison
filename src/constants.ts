@@ -1,0 +1,17 @@
+export const booleanType = 0
+export const smallStringType = 1
+export const stringType = 2
+export const largeStringType = 3
+export const nanoNumberType = 4
+export const smallNumberType = 5
+export const numberType = 6
+export const floatType = 7
+export const doubleType = 8
+export const smallArrayType = 9
+export const arrayType = 10
+export const largeArrayType = 11
+export const smallObjectType = 12
+export const objectType = 13
+export const largeObjectType = 14
+export const objectKey = 15
+export const dateType = 16

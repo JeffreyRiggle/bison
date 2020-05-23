@@ -17,14 +17,25 @@ const {
   dateType
 } = require('./constants')
 
-const decodeType = (stream, offset) => {
+interface IDecodeResult {
+  value: any;
+  offset: number
+}
+
+interface IDecodeKeyValueResult {
+  value: any;
+  key: string;
+  offset: number
+}
+
+const decodeType = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: stream.readInt8(offset),
     offset: offset + 1
   }
 }
 
-const decodePropertyString = (stream, offset) => {
+const decodePropertyString = (stream: Buffer, offset: number): IDecodeResult => {
   const stringLen = stream.readInt8(offset)
 
   return {
@@ -33,7 +44,7 @@ const decodePropertyString = (stream, offset) => {
   }
 }
 
-const decodeSmallString = (stream, offset) => {
+const decodeSmallString = (stream: Buffer, offset: number): IDecodeResult => {
   const stringLen = stream.readInt8(offset)
 
   return {
@@ -42,7 +53,7 @@ const decodeSmallString = (stream, offset) => {
   }
 }
 
-const decodeString = (stream, offset) => {
+const decodeString = (stream: Buffer, offset: number): IDecodeResult => {
   const stringLen = stream.readInt16LE(offset)
 
   return {
@@ -51,7 +62,7 @@ const decodeString = (stream, offset) => {
   }
 }
 
-const decodeLargeString = (stream, offset) => {
+const decodeLargeString = (stream: Buffer, offset: number): IDecodeResult => {
   const stringLen = stream.readInt32LE(offset)
 
   return {
@@ -60,64 +71,64 @@ const decodeLargeString = (stream, offset) => {
   }
 }
 
-const decodeBoolean = (stream, offset) => {
+const decodeBoolean = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: stream.readInt8(offset) === 1,
     offset: offset + 1
   }
 }
 
-const decodeNanoNumber = (stream, offset) => {
+const decodeNanoNumber = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: stream.readInt8(offset),
     offset: offset + 1
   }
 }
 
-const decodeSmallNumber = (stream, offset) => {
+const decodeSmallNumber = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: stream.readInt16LE(offset),
     offset: offset + 2
   }
 }
 
-const decodeNumber = (stream, offset) => {
+const decodeNumber = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: stream.readInt32LE(offset),
     offset: offset + 4
   }
 }
 
-const decodeFloat = (stream, offset) => {
+const decodeFloat = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: stream.readFloatLE(offset),
     offset: offset + 4
   }
 }
 
-const decodeDouble = (stream, offset) => {
+const decodeDouble = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: stream.readDoubleLE(offset),
     offset: offset + 8
   }
 }
 
-const decodeSmallArray = (stream, offset) => {
+const decodeSmallArray = (stream: Buffer, offset: number): IDecodeResult => {
   const len = stream.readInt8(offset)
   return decodeArrayImpl(stream, offset + 1, len)
 }
 
-const decodeArray = (stream, offset) => {
+const decodeArray = (stream: Buffer, offset: number): IDecodeResult => {
   const len = stream.readInt16LE(offset)
   return decodeArrayImpl(stream, offset + 2, len)
 }
 
-const decodeLargeArray = (stream, offset) => {
+const decodeLargeArray = (stream: Buffer, offset: number): IDecodeResult => {
   const len = stream.readInt32LE(offset)
   return decodeArrayImpl(stream, offset + 4, len)
 }
 
-const decodeArrayImpl = (stream, offset, len) => {
+const decodeArrayImpl = (stream: Buffer, offset: number, len: number): IDecodeResult => {
   let curr = offset
   let iter = 0
   const retVal = []
@@ -136,24 +147,24 @@ const decodeArrayImpl = (stream, offset, len) => {
   }
 }
 
-const decodeSmallObject = (stream, offset) => {
+const decodeSmallObject = (stream: Buffer, offset: number): IDecodeResult => {
   const len = stream.readInt8(offset)
   return decodeObjectImpl(stream, offset + 1, len)
 }
 
-const decodeObject = (stream, offset) => {
+const decodeObject = (stream: Buffer, offset: number): IDecodeResult => {
   const len = stream.readInt16LE(offset)
   return decodeObjectImpl(stream, offset + 2, len)
 }
 
-const decodeLargeObject = (stream, offset) => {
+const decodeLargeObject = (stream: Buffer, offset: number): IDecodeResult => {
   const len = stream.readInt32LE(offset)
   return decodeObjectImpl(stream, offset + 4, len)
 }
 
-const decodeObjectImpl = (stream, offset, len) => {
+const decodeObjectImpl = (stream: Buffer, offset: number, len: number): IDecodeResult => {
   let curr = offset
-  const retVal = {}
+  const retVal: any = {}
   let iter = 0
 
   while (iter < len) {
@@ -170,14 +181,14 @@ const decodeObjectImpl = (stream, offset, len) => {
   }
 }
 
-const decodeDate = (stream, offset) => {
+const decodeDate = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: new Date(Number(stream.readBigUInt64LE(offset))),
     offset: offset + 8
   }
 }
 
-const decodeValue = (stream, type, offset) => {
+const decodeValue = (stream: Buffer, type: number, offset: number): IDecodeResult => {
   if (type === booleanType) {
     return decodeBoolean(stream, offset)
   }
@@ -245,7 +256,7 @@ const decodeValue = (stream, type, offset) => {
   throw new Error(`Unknown type ${type}`)
 }
 
-const decodeKeyValuePair = (stream, offset) => {
+const decodeKeyValuePair = (stream: Buffer, offset: number): IDecodeKeyValueResult => {
   const keyResult = decodePropertyString(stream, offset)
   const valueTypeResult = decodeType(stream, keyResult.offset)
   const valueResult = decodeValue(stream, valueTypeResult.value, valueTypeResult.offset)
@@ -257,7 +268,7 @@ const decodeKeyValuePair = (stream, offset) => {
   }
 }
 
-module.exports = {
+export {
   decodeType,
   decodeBoolean,
   decodeNumber,

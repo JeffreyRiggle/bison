@@ -43,7 +43,8 @@ const {
 } = require('../constants')
 
 describe('decode', () => {
-  let buff, result
+  let buff: Buffer
+  let result: any
 
   describe('when decoding a boolean', () => {
     beforeEach(() => {
@@ -202,7 +203,7 @@ describe('decode', () => {
   })
 
   describe('when decoding a date', () => {
-    let d
+    let d: Date
 
     beforeEach(() => {
       d = new Date()
@@ -258,7 +259,7 @@ describe('decode', () => {
   })
 
   describe('when decoding a string', () => {
-    let str
+    let str: string
 
     beforeEach(() => {
       str = ''
@@ -291,7 +292,7 @@ describe('decode', () => {
   })
 
   describe('when decoding a large string', () => {
-    let str
+    let str: string
 
     beforeEach(() => {
       str = ''
@@ -362,7 +363,7 @@ describe('decode', () => {
   })
 
   describe('when decoding an array', () => {
-    let arr
+    let arr: any[]
 
     beforeEach(() => {
       arr = []
@@ -395,7 +396,7 @@ describe('decode', () => {
   })
 
   describe('when decoding a large array', () => {
-    let arr
+    let arr: any[]
 
     beforeEach(() => {
       arr = []

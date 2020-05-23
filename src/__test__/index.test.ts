@@ -2,7 +2,9 @@
 const { encode, decode } = require('../index')
 
 describe('JSON conversion', () => {
-  let encodedResult, result, original
+  let encodedResult: Buffer
+  let result: any
+  let original: any
 
   describe('When an object containing a boolean is used', () => {
     beforeEach(() => {
