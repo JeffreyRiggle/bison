@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --coverage",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "perf:small": "node ./testing/compare.js ./small.json",
