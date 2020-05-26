@@ -29,6 +29,7 @@ console.log(decoded) // original object.
 ```
 
 ## Initial testing
+All testing has been done on a local development machine, results may vary. To run the tests yourself use the `npm run perf:nano` through `npm run perf:large` commands provided by this package.
 
 ### Encoding
 Basic encoding in this case is using a very simple approach
@@ -66,6 +67,8 @@ const decoded = JSON.parse(buff.toString('utf8'))
 | Basic large | 216.865982 |
 | Bison large | 176.570844 |
 
+### Totals
+
 | Type | Total time delta | Size delta |
 | - | - | - |
 | nano | +1.248035 | +3 |
@@ -73,4 +76,4 @@ const decoded = JSON.parse(buff.toString('utf8'))
 | medium | -40.768355 | +27732 |
 | large | -87.653769 | +55465 |
 
-** Time differences are Basic - Bison (positive numbers are improvements)**
+_Time differences are Basic - Bison (positive numbers are improvements)_
