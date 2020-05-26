@@ -1,5 +1,5 @@
 {
-  "name": "bison",
+  "name": "@jeffriggle/bison",
   "version": "1.0.0",
   "description": "JSON to binary",
   "main": "index.js",
