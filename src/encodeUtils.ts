@@ -14,7 +14,9 @@ import {
   smallNumberType,
   floatType,
   doubleType,
-  dateType
+  dateType,
+  undefinedType,
+  nullType
 } from './constants'
 
 interface Sizable {
@@ -59,6 +61,20 @@ const encodeBoolean = (stream: Buffer, boolean: boolean): Buffer => {
   const buff = Buffer.alloc(2)
   buff.writeInt8(booleanType)
   buff.writeInt8(boolean ? 1 : 0, 1)
+
+  return Buffer.concat([stream, buff])
+}
+
+const encodeUndefined = (stream: Buffer): Buffer => {
+  const buff = Buffer.alloc(1)
+  buff.writeInt8(undefinedType)
+
+  return Buffer.concat([stream, buff])
+}
+
+const encodeNull = (stream: Buffer): Buffer => {
+  const buff = Buffer.alloc(1)
+  buff.writeInt8(nullType)
 
   return Buffer.concat([stream, buff])
 }
@@ -141,6 +157,14 @@ const encodeObject = (stream: Buffer, value: any): Buffer => {
 }
 
 const encodeValue = (stream: Buffer, value: any): Buffer => {
+  if (value === undefined) {
+    return encodeUndefined(stream)
+  }
+
+  if (value === null) {
+    return encodeNull(stream)
+  }
+
   if (typeof value === 'boolean') {
     return encodeBoolean(stream, value)
   }

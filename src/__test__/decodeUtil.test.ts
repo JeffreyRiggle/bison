@@ -18,10 +18,13 @@ import {
   decodeSmallArray,
   decodeArray,
   decodeLargeArray,
-  decodeDate
+  decodeDate,
+  decodeUndefined,
+  decodeNull
 } from '../decodeUtils'
 
 import {
+  undefinedType,
   smallStringType,
   stringType,
   largeStringType,
@@ -34,12 +37,65 @@ import {
   smallNumberType,
   floatType,
   doubleType,
-  dateType
+  dateType,
+  nullType
 } from '../constants'
 
 describe('decode', () => {
   let buff: Buffer
   let result: any
+
+  describe('when decoding an undefined', () => {
+    beforeEach(() => {
+      buff = encodeValue(Buffer.alloc(0), undefined)
+    })
+
+    describe('when decoding the type', () => {
+      beforeEach(() => {
+        result = decodeType(buff, 0)
+      })
+
+      it('should have the correct type', () => {
+        expect(result.value).toBe(undefinedType)
+      })
+    })
+
+    describe('when decoding the value', () => {
+      beforeEach(() => {
+        result = decodeUndefined(buff, 0)
+      })
+
+      it('should have the correct value', () => {
+        expect(result.value).toBe(undefined)
+      })
+    })
+  })
+
+  describe('when decoding a null', () => {
+    beforeEach(() => {
+      buff = encodeValue(Buffer.alloc(0), null)
+    })
+
+    describe('when decoding the type', () => {
+      beforeEach(() => {
+        result = decodeType(buff, 0)
+      })
+
+      it('should have the correct type', () => {
+        expect(result.value).toBe(nullType)
+      })
+    })
+
+    describe('when decoding the value', () => {
+      beforeEach(() => {
+        result = decodeNull(buff, 0)
+      })
+
+      it('should have the correct value', () => {
+        expect(result.value).toBe(null)
+      })
+    })
+  })
 
   describe('when decoding a boolean', () => {
     beforeEach(() => {

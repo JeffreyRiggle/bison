@@ -4,6 +4,8 @@ import {
 } from '../encodeUtils'
 
 import {
+  undefinedType,
+  nullType,
   smallStringType,
   stringType,
   booleanType,
@@ -20,6 +22,26 @@ import {
 
 describe('encode util', () => {
   let result: any
+
+  describe('when a undefined is provided', () => {
+    beforeEach(() => {
+      result = encodeValue(Buffer.alloc(0), undefined)
+    })
+
+    it('should have the correct type', () => {
+      expect(result[0]).toBe(undefinedType)
+    })
+  })
+
+  describe('when a null is provided', () => {
+    beforeEach(() => {
+      result = encodeValue(Buffer.alloc(0), null)
+    })
+
+    it('should have the correct type', () => {
+      expect(result[0]).toBe(nullType)
+    })
+  })
 
   describe('when a boolean is provided', () => {
     describe('when value is true', () => {
@@ -38,7 +60,7 @@ describe('encode util', () => {
 
     describe('when value is false', () => {
       beforeEach(() => {
-        result = encodeValue(Buffer.alloc(2), false)
+        result = encodeValue(Buffer.alloc(0), false)
       })
 
       it('should have the correct type', () => {

@@ -14,7 +14,9 @@ import {
   smallNumberType,
   floatType,
   doubleType,
-  dateType
+  dateType,
+  undefinedType,
+  nullType
 } from './constants'
 
 interface IDecodeResult {
@@ -32,6 +34,20 @@ const decodeType = (stream: Buffer, offset: number): IDecodeResult => {
   return {
     value: stream.readInt8(offset),
     offset: offset + 1
+  }
+}
+
+const decodeUndefined = (stream: Buffer, offset: number): IDecodeResult => {
+  return {
+    value: undefined,
+    offset
+  }
+}
+
+const decodeNull = (stream: Buffer, offset: number): IDecodeResult => {
+  return {
+    value: null,
+    offset
   }
 }
 
@@ -189,6 +205,14 @@ const decodeDate = (stream: Buffer, offset: number): IDecodeResult => {
 }
 
 const decodeValue = (stream: Buffer, type: number, offset: number): IDecodeResult => {
+  if (type === undefinedType) {
+    return decodeUndefined(stream, offset)
+  }
+
+  if (type === nullType) {
+    return decodeNull(stream, offset);
+  }
+
   if (type === booleanType) {
     return decodeBoolean(stream, offset)
   }
@@ -287,5 +311,7 @@ export {
   decodeLargeObject,
   decodeKeyValuePair,
   decodeDate,
-  decodeValue
+  decodeValue,
+  decodeUndefined,
+  decodeNull
 }
