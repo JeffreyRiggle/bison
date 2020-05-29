@@ -1,10 +1,6 @@
 import {
-  encodeBoolean,
-  encodeNumber,
-  encodeString,
+  encodeValue,
   encodeKeyValuePair,
-  encodeArray,
-  encodeDate
 } from '../encodeUtils'
 
 import {
@@ -47,7 +43,7 @@ describe('decode', () => {
 
   describe('when decoding a boolean', () => {
     beforeEach(() => {
-      buff = encodeBoolean(Buffer.alloc(0), true)
+      buff = encodeValue(Buffer.alloc(0), true)
     })
 
     describe('when decoding the type', () => {
@@ -73,7 +69,7 @@ describe('decode', () => {
 
   describe('when decoding a nano number', () => {
     beforeEach(() => {
-      buff = encodeNumber(Buffer.alloc(0), 6)
+      buff = encodeValue(Buffer.alloc(0), 6)
     })
 
     describe('when decoding the type', () => {
@@ -99,7 +95,7 @@ describe('decode', () => {
 
   describe('when decoding a small number', () => {
     beforeEach(() => {
-      buff = encodeNumber(Buffer.alloc(0), 230)
+      buff = encodeValue(Buffer.alloc(0), 230)
     })
 
     describe('when decoding the type', () => {
@@ -125,7 +121,7 @@ describe('decode', () => {
 
   describe('when decoding a number', () => {
     beforeEach(() => {
-      buff = encodeNumber(Buffer.alloc(0), 50689)
+      buff = encodeValue(Buffer.alloc(0), 50689)
     })
 
     describe('when decoding the type', () => {
@@ -151,7 +147,7 @@ describe('decode', () => {
 
   describe('when decoding a float', () => {
     beforeEach(() => {
-      buff = encodeNumber(Buffer.alloc(0), 10.5)
+      buff = encodeValue(Buffer.alloc(0), 10.5)
     })
 
     describe('when decoding the type', () => {
@@ -177,7 +173,7 @@ describe('decode', () => {
 
   describe('when decoding a double', () => {
     beforeEach(() => {
-      buff = encodeNumber(Buffer.alloc(0), 50024.4)
+      buff = encodeValue(Buffer.alloc(0), 50024.4)
     })
 
     describe('when decoding the type', () => {
@@ -206,7 +202,7 @@ describe('decode', () => {
 
     beforeEach(() => {
       d = new Date()
-      buff = encodeDate(Buffer.alloc(0), d)
+      buff = encodeValue(Buffer.alloc(0), d)
     })
 
     describe('when decoding the type', () => {
@@ -233,7 +229,7 @@ describe('decode', () => {
   // TODO string and large string
   describe('when decoding a small string', () => {
     beforeEach(() => {
-      buff = encodeString(Buffer.alloc(0), 'foo')
+      buff = encodeValue(Buffer.alloc(0), 'foo')
     })
 
     describe('when decoding the type', () => {
@@ -266,7 +262,7 @@ describe('decode', () => {
         str += iter
       }
 
-      buff = encodeString(Buffer.alloc(0), str)
+      buff = encodeValue(Buffer.alloc(0), str)
     })
 
     describe('when decoding the type', () => {
@@ -299,7 +295,7 @@ describe('decode', () => {
         str += iter
       }
 
-      buff = encodeString(Buffer.alloc(0), str)
+      buff = encodeValue(Buffer.alloc(0), str)
     })
 
     describe('when decoding the type', () => {
@@ -325,7 +321,7 @@ describe('decode', () => {
 
   describe('when decoding a small array', () => {
     beforeEach(() => {
-      buff = encodeArray(Buffer.alloc(0), [5, true, 'foo'])
+      buff = encodeValue(Buffer.alloc(0), [5, true, 'foo'])
     })
 
     describe('when decoding the type', () => {
@@ -370,7 +366,7 @@ describe('decode', () => {
       for (let i = 0; i < 130; i++) {
         arr.push(i)
       }
-      buff = encodeArray(Buffer.alloc(0), arr)
+      buff = encodeValue(Buffer.alloc(0), arr)
     })
 
     describe('when decoding the type', () => {
@@ -403,7 +399,7 @@ describe('decode', () => {
       for (let i = 0; i < 40000; i++) {
         arr.push(i)
       }
-      buff = encodeArray(Buffer.alloc(0), arr)
+      buff = encodeValue(Buffer.alloc(0), arr)
     })
 
     describe('when decoding the type', () => {

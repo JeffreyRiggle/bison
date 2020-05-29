@@ -186,12 +186,6 @@ const encodeDate = (stream: Buffer, date: Date): Buffer => {
 }
 
 export {
-  encodeBoolean,
-  encodeNumber,
-  encodeString,
-  encodeArray,
-  encodeObject,
   encodeKeyValuePair,
-  encodeDate,
   encodeValue
 }

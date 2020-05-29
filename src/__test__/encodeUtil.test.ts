@@ -1,11 +1,6 @@
 import {
-  encodeArray,
-  encodeBoolean,
-  encodeNumber,
-  encodeString,
   encodeKeyValuePair,
-  encodeObject,
-  encodeDate
+  encodeValue
 } from '../encodeUtils'
 
 import {
@@ -29,7 +24,7 @@ describe('encode util', () => {
   describe('when a boolean is provided', () => {
     describe('when value is true', () => {
       beforeEach(() => {
-        result = encodeBoolean(Buffer.alloc(0), true)
+        result = encodeValue(Buffer.alloc(0), true)
       })
 
       it('should have the correct type', () => {
@@ -43,7 +38,7 @@ describe('encode util', () => {
 
     describe('when value is false', () => {
       beforeEach(() => {
-        result = encodeBoolean(Buffer.alloc(2), false)
+        result = encodeValue(Buffer.alloc(2), false)
       })
 
       it('should have the correct type', () => {
@@ -60,7 +55,7 @@ describe('encode util', () => {
     const original = 'foobar'
 
     beforeEach(() => {
-      result = encodeString(Buffer.alloc(0), original)
+      result = encodeValue(Buffer.alloc(0), original)
     })
 
     it('should have the correct type', () => {
@@ -80,7 +75,7 @@ describe('encode util', () => {
     const original = 'Bacon ipsum dolor amet pork belly tongue pancetta turducken, bresaola shank meatball fatback salami sirloin ground round. Pork loin shankle strip steak salami chicken sausage prosciutto flank. Andouille salami corned beef, prosciutto chislic turducken shank doner jerky kielbasa pork loin bresaola chuck burgdoggen. Cupim ground round pork belly ham, biltong rump frankfurter bresaola shank shankle andouille fatback.'
 
     beforeEach(() => {
-      result = encodeString(Buffer.alloc(0), original)
+      result = encodeValue(Buffer.alloc(0), original)
     })
 
     it('should have the correct type', () => {
@@ -98,7 +93,7 @@ describe('encode util', () => {
 
   describe('when a nano number is provided', () => {
     beforeEach(() => {
-      result = encodeNumber(Buffer.alloc(0), 6)
+      result = encodeValue(Buffer.alloc(0), 6)
     })
 
     it('should have the correct type', () => {
@@ -112,7 +107,7 @@ describe('encode util', () => {
 
   describe('when a small number is provided', () => {
     beforeEach(() => {
-      result = encodeNumber(Buffer.alloc(0), 2000)
+      result = encodeValue(Buffer.alloc(0), 2000)
     })
 
     it('should have the correct type', () => {
@@ -126,7 +121,7 @@ describe('encode util', () => {
 
   describe('when a float number is provided', () => {
     beforeEach(() => {
-      result = encodeNumber(Buffer.alloc(0), 10.5)
+      result = encodeValue(Buffer.alloc(0), 10.5)
     })
 
     it('should have the correct type', () => {
@@ -140,7 +135,7 @@ describe('encode util', () => {
 
   describe('when a double number is provided', () => {
     beforeEach(() => {
-      result = encodeNumber(Buffer.alloc(0), 50024.4)
+      result = encodeValue(Buffer.alloc(0), 50024.4)
     })
 
     it('should have the correct type', () => {
@@ -154,7 +149,7 @@ describe('encode util', () => {
 
   describe('when a large number is provided', () => {
     beforeEach(() => {
-      result = encodeNumber(Buffer.alloc(0), 2147483647)
+      result = encodeValue(Buffer.alloc(0), 2147483647)
     })
 
     it('should have the correct type', () => {
@@ -169,7 +164,7 @@ describe('encode util', () => {
   describe('when array is encoded', () => {
     describe('and values are numbers', () => {
       beforeEach(() => {
-        result = encodeArray(Buffer.alloc(0), [5, 8, 2])
+        result = encodeValue(Buffer.alloc(0), [5, 8, 2])
       })
 
       it('should have the correct type', () => {
@@ -207,7 +202,7 @@ describe('encode util', () => {
 
     describe('and values are booleans', () => {
       beforeEach(() => {
-        result = encodeArray(Buffer.alloc(0), [true, true, false])
+        result = encodeValue(Buffer.alloc(0), [true, true, false])
       })
 
       it('should have the correct type', () => {
@@ -245,7 +240,7 @@ describe('encode util', () => {
 
     describe('and values are strings', () => {
       beforeEach(() => {
-        result = encodeArray(Buffer.alloc(0), ['foo', 'bar', 'baz'])
+        result = encodeValue(Buffer.alloc(0), ['foo', 'bar', 'baz'])
       })
 
       it('should have the correct type', () => {
@@ -283,7 +278,7 @@ describe('encode util', () => {
 
     describe('and values are arrays', () => {
       beforeEach(() => {
-        result = encodeArray(Buffer.alloc(0), [[5], [8], [2]])
+        result = encodeValue(Buffer.alloc(0), [[5], [8], [2]])
       })
 
       it('should have the correct type', () => {
@@ -321,7 +316,7 @@ describe('encode util', () => {
 
     describe('and values are mixed', () => {
       beforeEach(() => {
-        result = encodeArray(Buffer.alloc(0), [5, true, 'foo'])
+        result = encodeValue(Buffer.alloc(0), [5, true, 'foo'])
       })
 
       it('should have the correct type', () => {
@@ -360,7 +355,7 @@ describe('encode util', () => {
 
   describe('when an object is provided', () => {
     beforeEach(() => {
-      result = encodeObject(Buffer.alloc(0), { foo: 5, bar: 'foo' })
+      result = encodeValue(Buffer.alloc(0), { foo: 5, bar: 'foo' })
     })
 
     it('should have the correct type', () => {
@@ -525,7 +520,7 @@ describe('encode util', () => {
 
     beforeEach(() => {
       d = new Date()
-      result = encodeDate(Buffer.alloc(0), d)
+      result = encodeValue(Buffer.alloc(0), d)
     })
 
     it('should have the correct type', () => {
