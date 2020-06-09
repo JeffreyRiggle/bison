@@ -16,7 +16,8 @@ import {
   doubleType,
   dateType,
   undefinedType,
-  nullType
+  nullType,
+  largeNumberType
 } from './constants'
 
 interface IDecodeResult {
@@ -129,6 +130,13 @@ const decodeDouble = (stream: Buffer, offset: number): IDecodeResult => {
   }
 }
 
+const decodeLong = (stream: Buffer, offset: number): IDecodeResult => {
+  return {
+    value: stream.readBigInt64LE(offset),
+    offset: offset + 8
+  }
+}
+
 const decodeSmallArray = (stream: Buffer, offset: number): IDecodeResult => {
   const len = stream.readInt8(offset)
   return decodeArrayImpl(stream, offset + 1, len)
@@ -227,6 +235,10 @@ const decodeValue = (stream: Buffer, type: number, offset: number): IDecodeResul
 
   if (type === largeStringType) {
     return decodeLargeString(stream, offset)
+  }
+
+  if (type === largeNumberType) {
+    return decodeLong(stream, offset)
   }
 
   if (type === numberType) {

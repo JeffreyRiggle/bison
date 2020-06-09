@@ -16,7 +16,8 @@ import {
   doubleType,
   dateType,
   undefinedType,
-  nullType
+  nullType,
+  largeNumberType
 } from './constants'
 
 interface Sizable {
@@ -119,6 +120,14 @@ const encodeLargeNumber = (stream: Buffer, num: number): Buffer => {
   return Buffer.concat([stream, buff])
 }
 
+const encodeLong = (stream: Buffer, num: bigint): Buffer => {
+  const buff = Buffer.alloc(9)
+  buff.writeInt8(largeNumberType)
+  buff.writeBigInt64LE(num, 1)
+
+  return Buffer.concat([stream, buff])
+}
+
 const encodeNumber = (stream: Buffer, num: number): Buffer => {
   const isDecimal = !Number.isInteger(num)
 
@@ -130,7 +139,11 @@ const encodeNumber = (stream: Buffer, num: number): Buffer => {
     return isDecimal ? encodeFloat(stream, num) : encodeSmallNumber(stream, num)
   }
 
-  return isDecimal ? encodeDouble(stream, num) : encodeLargeNumber(stream, num)
+  if (num < 2147483648) {
+    return isDecimal ? encodeDouble(stream, num) : encodeLargeNumber(stream, num)
+  }
+
+  return isDecimal ? encodeDouble(stream, num) : encodeLong(stream, BigInt(num))
 }
 
 const encodeArray = (stream: Buffer, value: any[]): Buffer => {

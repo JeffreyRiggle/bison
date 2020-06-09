@@ -20,7 +20,8 @@ import {
   decodeLargeArray,
   decodeDate,
   decodeUndefined,
-  decodeNull
+  decodeNull,
+  decodeValue
 } from '../decodeUtils'
 
 import {
@@ -38,7 +39,8 @@ import {
   floatType,
   doubleType,
   dateType,
-  nullType
+  nullType,
+  largeNumberType
 } from '../constants'
 
 describe('decode', () => {
@@ -197,6 +199,32 @@ describe('decode', () => {
 
       it('should have the correct value', () => {
         expect(result.value).toBe(50689)
+      })
+    })
+  })
+
+  describe('when decoding a long', () => {
+    beforeEach(() => {
+      buff = encodeValue(Buffer.alloc(0), Number.MAX_SAFE_INTEGER)
+    })
+
+    describe('when decoding the type', () => {
+      beforeEach(() => {
+        result = decodeType(buff, 0)
+      })
+
+      it('should have the correct type', () => {
+        expect(result.value).toBe(largeNumberType)
+      })
+    })
+
+    describe('when decoding the value', () => {
+      beforeEach(() => {
+        result = decodeValue(buff, largeNumberType, 1)
+      })
+
+      it('should have the correct value', () => {
+        expect(result.value).toBe(BigInt(Number.MAX_SAFE_INTEGER))
       })
     })
   })

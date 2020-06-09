@@ -17,7 +17,8 @@ import {
   smallNumberType,
   floatType,
   doubleType,
-  dateType
+  dateType,
+  largeNumberType
 } from '../constants'
 
 describe('encode util', () => {
@@ -180,6 +181,20 @@ describe('encode util', () => {
 
     it('should have the correct value', () => {
       expect(result.readInt32LE(1)).toBe(2147483647)
+    })
+  })
+
+  describe('when a long is provided', () => {
+    beforeEach(() => {
+      result = encodeValue(Buffer.alloc(0), Number.MAX_SAFE_INTEGER)
+    })
+
+    it('should have the correct type', () => {
+      expect(result[0]).toBe(largeNumberType)
+    })
+
+    it('should have the correct value', () => {
+      expect(result.readBigUInt64LE(1)).toBe(BigInt(Number.MAX_SAFE_INTEGER))
     })
   })
 

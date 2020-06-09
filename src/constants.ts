@@ -17,3 +17,4 @@ export const objectType = 15
 export const largeObjectType = 16
 export const objectKey = 17
 export const dateType = 18
+export const largeNumberType = 19
