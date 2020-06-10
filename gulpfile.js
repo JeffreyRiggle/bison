@@ -24,7 +24,9 @@ function cleanDirectory (directory) {
 
 function clean (cb) {
   const distDir = path.join(__dirname, 'dist')
-  cleanDirectory(distDir)
+  if (fs.existsSync(distDir)) {
+    cleanDirectory(distDir)
+  }
   cb()
 }
 
