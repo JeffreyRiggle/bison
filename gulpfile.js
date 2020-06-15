@@ -5,6 +5,8 @@ const ts = require('gulp-typescript')
 const gulp = require('gulp')
 const tsProject = ts.createProject('tsconfig.json')
 const baseConfig = require('./tsconfig.json').compilerOptions
+const webpack = require('webpack')
+const webpackConfig = require('./webpack.config')
 
 function cleanDirectory (directory) {
   const files = fs.readdirSync(directory)
@@ -40,13 +42,17 @@ gulp.task('buildnode', () => {
 })
 
 gulp.task('buildweb', () => {
-  return tsProject.src()
-    .pipe(ts({
-      ...baseConfig,
-      module: 'ESNext',
-      moduleResolution: 'Node'
-    }))
-    .pipe(gulp.dest('dist/esm'))
+  return new Promise((resolve, reject) => {
+    webpack(webpackConfig, (err, stats) => {
+      if (err) {
+        return reject(err)
+      }
+      if (stats.hasErrors()) {
+        return reject(new Error(stats.compilation.errors.join('\n')))
+      }
+      return resolve()
+    })
+  })
 })
 
 exports.clean = clean
