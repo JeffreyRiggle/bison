@@ -142,6 +142,20 @@ describe('encode util', () => {
     })
   })
 
+  describe('when a small negative number is provided', () => {
+    beforeEach(() => {
+      result = encodeValue(Buffer.alloc(0), -2000)
+    })
+
+    it('should have the correct type', () => {
+      expect(result[0]).toBe(smallNumberType)
+    })
+
+    it('should have the correct value', () => {
+      expect(result.readInt16LE(1)).toBe(-2000)
+    })
+  })
+
   describe('when a float number is provided', () => {
     beforeEach(() => {
       result = encodeValue(Buffer.alloc(0), 10.5)

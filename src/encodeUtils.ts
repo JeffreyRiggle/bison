@@ -130,16 +130,17 @@ const encodeLong = (stream: Buffer, num: bigint): Buffer => {
 
 const encodeNumber = (stream: Buffer, num: number): Buffer => {
   const isDecimal = !Number.isInteger(num)
+  const absValue = Math.abs(num)
 
-  if (num < 128) {
+  if (absValue < 128) {
     return isDecimal ? encodeFloat(stream, num) : encodeNanoNumber(stream, num)
   }
 
-  if (num < 32768) {
+  if (absValue < 32768) {
     return isDecimal ? encodeFloat(stream, num) : encodeSmallNumber(stream, num)
   }
 
-  if (num < 2147483648) {
+  if (absValue < 2147483648) {
     return isDecimal ? encodeDouble(stream, num) : encodeLargeNumber(stream, num)
   }
 
