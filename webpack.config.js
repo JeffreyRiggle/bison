@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const EsmWebpackPlugin = require('@purtuga/esm-webpack-plugin')
 
 module.exports = {
