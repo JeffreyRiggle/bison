@@ -28,6 +28,9 @@ const decoded = decode(encoded)
 console.log(decoded) // original object.
 ```
 
+## Examples
+Examples using bison can be found here https://github.com/JeffreyRiggle/bison-examples
+
 ## Initial testing
 All testing has been done on a local development machine, results may vary. To run the tests yourself use the `npm run perf:nano` through `npm run perf:large` commands provided by this package.
 
