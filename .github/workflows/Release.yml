@@ -1,0 +1,32 @@
+on: 
+    push:
+        branches:
+            - master
+
+name: Create Release
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+          - name: Install node
+            uses: actions/setup-node@v1
+            with:
+                node-version: '10.x'
+      
+          - name: Check out code
+            uses: actions/checkout@v1
+          
+          - name: Install
+            run: npm ci
+      
+          - name: Lint
+            run: npm run lint
+      
+          - name: Build
+            run: npm run build
+
+          - name: Build Site
+            run: |
+              curl -XPOST -u "JeffreyRiggle:${{secrets.SITETOKEN}}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/JeffreyRiggle/my-site/dispatches --data '{"event_type": "release_site"}'
