@@ -375,7 +375,7 @@ describe('decode', () => {
 
     beforeEach(() => {
       str = ''
-      for (let iter = 0; iter < 10000; iter++) {
+      for (let iter = 0; iter < 66000; iter++) {
         str += iter
       }
 
@@ -447,7 +447,7 @@ describe('decode', () => {
     beforeEach(() => {
       arr = []
 
-      for (let i = 0; i < 130; i++) {
+      for (let i = 0; i < 260; i++) {
         arr.push(i)
       }
       buff = encodeValue(Buffer.alloc(0), arr)
@@ -469,7 +469,7 @@ describe('decode', () => {
       })
 
       it('should have the correct length', () => {
-        expect(result.value.length).toBe(130)
+        expect(result.value.length).toBe(260)
       })
     })
   })
@@ -480,7 +480,7 @@ describe('decode', () => {
     beforeEach(() => {
       arr = []
 
-      for (let i = 0; i < 40000; i++) {
+      for (let i = 0; i < 66000; i++) {
         arr.push(i)
       }
       buff = encodeValue(Buffer.alloc(0), arr)
@@ -502,7 +502,7 @@ describe('decode', () => {
       })
 
       it('should have the correct length', () => {
-        expect(result.value.length).toBe(40000)
+        expect(result.value.length).toBe(66000)
       })
     })
   })

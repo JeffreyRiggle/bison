@@ -53,7 +53,7 @@ const decodeNull = (stream: Buffer, offset: number): IDecodeResult => {
 }
 
 const decodePropertyString = (stream: Buffer, offset: number): IDecodeResult => {
-  const stringLen = stream.readInt8(offset)
+  const stringLen = stream.readUInt8(offset)
 
   return {
     value: stream.toString('utf8', offset + 1, offset + stringLen + 1),
@@ -62,7 +62,7 @@ const decodePropertyString = (stream: Buffer, offset: number): IDecodeResult => 
 }
 
 const decodeSmallString = (stream: Buffer, offset: number): IDecodeResult => {
-  const stringLen = stream.readInt8(offset)
+  const stringLen = stream.readUInt8(offset)
 
   return {
     value: stream.toString('utf8', offset + 1, offset + stringLen + 1),
@@ -71,7 +71,7 @@ const decodeSmallString = (stream: Buffer, offset: number): IDecodeResult => {
 }
 
 const decodeString = (stream: Buffer, offset: number): IDecodeResult => {
-  const stringLen = stream.readInt16LE(offset)
+  const stringLen = stream.readUInt16LE(offset)
 
   return {
     value: stream.toString('utf8', offset + 2, offset + stringLen + 2),
@@ -80,7 +80,7 @@ const decodeString = (stream: Buffer, offset: number): IDecodeResult => {
 }
 
 const decodeLargeString = (stream: Buffer, offset: number): IDecodeResult => {
-  const stringLen = stream.readInt32LE(offset)
+  const stringLen = stream.readUInt32LE(offset)
 
   return {
     value: stream.toString('utf8', offset + 4, offset + stringLen + 4),

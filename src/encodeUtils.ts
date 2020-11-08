@@ -27,25 +27,25 @@ interface Sizable {
 const handleLength = (obj: Sizable, small: number, medium: number, large: number): Buffer => {
   const len = obj.length
 
-  if (len < 127) {
+  if (len < 255) {
     const buff = Buffer.alloc(2)
     buff.writeInt8(small, 0)
-    buff.writeInt8(len, 1)
+    buff.writeUInt8(len, 1)
 
     return buff
   }
 
-  if (len < 32768) {
+  if (len < 65535) {
     const buff = Buffer.alloc(3)
     buff.writeInt8(medium, 0)
-    buff.writeInt16LE(len, 1)
+    buff.writeUInt16LE(len, 1)
 
     return buff
   }
 
   const buff = Buffer.alloc(5)
   buff.writeInt8(large, 0)
-  buff.writeInt32LE(len, 1)
+  buff.writeUInt32LE(len, 1)
 
   return buff
 }
@@ -209,7 +209,7 @@ const encodeValue = (stream: Buffer, value: any): Buffer => {
 const encodeKeyValuePair = (stream: Buffer, key: string, value: any): Buffer => {
   const buff = Buffer.alloc(key.length + 2)
   buff.writeInt8(objectKey)
-  buff.writeInt8(key.length, 1)
+  buff.writeUInt8(key.length, 1)
   buff.write(key, 2)
 
   return Buffer.concat([stream, encodeValue(buff, value)])
