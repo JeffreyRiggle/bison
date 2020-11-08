@@ -18,7 +18,8 @@ import {
   floatType,
   doubleType,
   dateType,
-  largeNumberType
+  largeNumberType,
+  largeStringType
 } from '../constants'
 
 describe('encode util', () => {
@@ -111,6 +112,30 @@ describe('encode util', () => {
 
     it('should have the correct string', () => {
       expect(result.toString('utf8', 3)).toBe(original)
+    })
+  })
+
+  describe('when a very large string is provided', () => {
+    let original: string
+
+    beforeEach(() => {
+      for (let i = 0; i < 65536; i++) {
+        original += '' + i;
+      }
+
+      result = encodeValue(Buffer.alloc(0), original)
+    })
+
+    it('should have the correct type', () => {
+      expect(result[0]).toBe(largeStringType)
+    })
+
+    it('should have the correct length', () => {
+      expect(result.readInt32LE(1)).toBe(original.length)
+    })
+
+    it('should have the correct string', () => {
+      expect(result.toString('utf8', 5)).toBe(original)
     })
   })
 
