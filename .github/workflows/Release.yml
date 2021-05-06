@@ -31,9 +31,8 @@ jobs:
             run: |
               git config --local user.email "$(git log --format='%ae' HEAD^!)"
               git config --local user.name "$(git log --format='%an' HEAD^!)"
-              git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
               npm version patch -m "Automated version bump"
-              git push
+              git push origin HEAD:master --force
 
           - name: Publish
             run: npm publish
