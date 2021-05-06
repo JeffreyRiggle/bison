@@ -27,6 +27,16 @@ jobs:
           - name: Build
             run: npm run build
 
+          - name: Version
+            run: |
+              npm version patch -m "Automated version bump"
+              git push
+
+          - name: Publish
+            run: npm publish
+            env:
+              NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
           - name: Build Site
             run: |
               curl -XPOST -u "JeffreyRiggle:${{secrets.SITETOKEN}}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/JeffreyRiggle/my-site/dispatches --data '{"event_type": "release_site"}'
