@@ -32,7 +32,7 @@ jobs:
               git config --local user.email "$(git log --format='%ae' HEAD^!)"
               git config --local user.name "$(git log --format='%an' HEAD^!)"
               npm version patch -m "Automated version bump"
-              git push
+              git push origin HEAD:master
 
           - name: Publish
             run: npm publish
