@@ -29,9 +29,9 @@ jobs:
 
           - name: Version
             run: |
+              git config --local user.email "$(git log --format='%ae' HEAD^!)"
+              git config --local user.name "$(git log --format='%an' HEAD^!)"
               npm version patch -m "Automated version bump"
-              git config --local user.email "jeffreyriggle@gmail.com"
-              git config --local user.name "jeffreyriggle"
               git push
 
           - name: Publish
