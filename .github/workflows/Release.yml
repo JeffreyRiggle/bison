@@ -14,6 +14,7 @@ jobs:
             uses: actions/setup-node@v1
             with:
                 node-version: '10.x'
+                scope: '@jeffriggle'
       
           - name: Check out code
             uses: actions/checkout@v1
