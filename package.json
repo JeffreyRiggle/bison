@@ -1,6 +1,6 @@
 {
   "name": "@jeffriggle/bison",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "description": "JSON to binary",
   "main": "index.js",
   "scripts": {
